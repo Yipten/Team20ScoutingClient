@@ -18,6 +18,7 @@
                 </TabItem.Header>
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                     <StackPanel Orientation="Vertical">
+                        <!--<TextBlock x:Name="OutputTBK" Text="" Foreground="White" Width="250" Height="250" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>-->
                         <Canvas x:Name="Team1SwitchBP" Width="400" Height="150" HorizontalAlignment="Left" Margin="5"/>
                         <Canvas x:Name="Team1ScaleBP" Width="400" Height="150" HorizontalAlignment="Left" Margin="5"/>
                         <Button x:Name="TestButton" Content="test" Click="TestButton_Click" Width="75" Height="25" HorizontalAlignment="Left" Margin="5"/>

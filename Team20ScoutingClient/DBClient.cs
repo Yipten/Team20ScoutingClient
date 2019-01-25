@@ -1,65 +1,47 @@
-﻿using System;
+﻿using System.Data.SQLite;
 using System.IO;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Windows;
 
 namespace Team20ScoutingClient {
     public class DBClient {
-        private readonly string BASE_URL;
+        SQLiteConnection connection;
 
-        private WebClient webClient;
-        
-        private string[]
-            vars,
-            values;
+        private readonly string FILE_PATH;
 
-        public DBClient(string baseURL) {
-            vars = new string[2];
-            values = new string[2];
-            BASE_URL = baseURL;
-            webClient = new WebClient();
+        public DBClient(string filePath) {
+            FILE_PATH = filePath;
+            //if the file doesn't exist...
+            if (!File.Exists(FILE_PATH))
+                //create the file
+                File.Create(FILE_PATH);
+            //connect to database
+            connection = new SQLiteConnection("Data Source=" + FILE_PATH + "; Version=3");
         }
 
-        public bool Ping() {
-            Ping ping = new Ping();
-            PingReply reply = ping.Send(BASE_URL, 10000);
-            if (reply != null)
-                return true;
-            return false;
+        public double[] GetData(int teamNumber, string columnName) {
+            //execute query to get requested data
+            string dataString = ExecuteQuery("SELECT " + columnName + " FROM robots WHERE team = " + teamNumber + " ORDER BY id ASC;", true);
+            //separate string by commas
+            string[] dataStringArray = dataString.Split(',');
+            //parse string array into double array
+            double[] data = new double[dataStringArray.Length - 1];
+            for (int i = 0; i < data.Length; i++)
+                data[i] = int.Parse(dataStringArray[i]);
+            return data;
         }
 
-        public double[] ReadStream(int teamNumber, string columnName) {
-            vars[0] = "team";
-            values[0] = teamNumber.ToString();
-            vars[1] = "column";
-            values[1] = columnName;
-            //if there is a value for every variable...
-            if (vars.Length == values.Length) {
-                try {
-                    //add GET variables to URL
-                    string url = BASE_URL + "?";
-                    for (int i = 0; i < vars.Length; i++)
-                        url += vars[i] + "=" + values[i] + "&";
-                    //get result from website
-                    Stream stream = webClient.OpenRead(url);
-                    StreamReader streamReader = new StreamReader(stream);
-                    string streamStr = streamReader.ReadToEnd();
-                    //close connection
-                    stream.Close();
-                    streamReader.Close();
-                    //convert result into array
-                    string[] dataStringArray = streamStr.Split(',');
-                    double[] data = new double[dataStringArray.Length - 1];
-                    for (int i = 0; i < data.Length; i++)
-                        data[i] = int.Parse(dataStringArray[i]);
-                    return data;
-                }
-                catch (Exception e) {
-                    MessageBox.Show(e.Message + "\n\nCheck your Internet connection", "Could not connect...", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-            return null;
+        public string ExecuteQuery(string query, bool read) {
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand(query, connection);
+            //string to be built and returned
+            string output = "";
+            if (read) {
+                SQLiteDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                    output += reader[0] + ",";
+            } else
+                output = command.ExecuteNonQuery().ToString();
+            connection.Close();
+            return output;
         }
     }
 }
