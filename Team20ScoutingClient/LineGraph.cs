@@ -59,7 +59,7 @@ namespace Team20ScoutingClient {
             PointCollection points = new PointCollection();
             double scale = (double)WIDTH / DataSet.Length;
             for (int i = 0; i < DataSet.Length; i++)
-                points.Add(new Point(scale * i, DataSet[i]));
+                points.Add(new Point(scale * i, HEIGHT - DataSet[i]));
             line.Points = points;
         }
 
