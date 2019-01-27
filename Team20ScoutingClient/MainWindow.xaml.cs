@@ -15,11 +15,18 @@ namespace Team20ScoutingClient {
             lineGraph1 = new LineGraph("Team 1 Switch Score", "Match", "Score", Team1SwitchLG, 0, 20, 300, 200);
         }
 
-        private void TestButton_Click(object sender, RoutedEventArgs e) {
-            boxPlot1.DataSet = client.GetData(1, "switch");
-            boxPlot1.Draw();
-            lineGraph1.DataSet = client.GetData(1, "switch");
-            lineGraph1.Draw();
+        private void BoxplotTI_GotFocus(object sender, RoutedEventArgs e) {
+            if (client.GetData("TestRobots", 1, "switch")) {
+                boxPlot1.DataSet = client.Data;
+                boxPlot1.Draw();
+            }
+        }
+
+        private void LinegraphTI_GotFocus(object sender, RoutedEventArgs e) {
+            if (client.GetData("TestRobots", 1, "switch")) {
+                lineGraph1.DataSet = client.Data;
+                lineGraph1.Draw();
+            }
         }
     }
 }
