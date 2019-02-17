@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,7 +8,7 @@ using System.Windows.Shapes;
 
 namespace Team20ScoutingClient {
     public class BoxPlot {
-        public double[] DataSet { get; set; } 
+        public List<int> DataSet { get; set; }
 
         private readonly string TITLE;
         private readonly Canvas CANVAS;
@@ -53,16 +54,18 @@ namespace Team20ScoutingClient {
             q3Pixels,
             maxPixels;
 
-        public BoxPlot(string title, Canvas canvas, int minValue, int maxValue, int width, int height) {
+        public BoxPlot(string title, Canvas canvas, int minValue, int maxValue) {
             //set constants
             TITLE = title;
             CANVAS = canvas;
             MIN_VALUE = minValue;
             MAX_VALUE = maxValue;
-            WIDTH = width;
-            HEIGHT = height;
+            WIDTH = (int)canvas.Width;
+            HEIGHT = (int)canvas.Height;
             BOXPLOT_MARGIN = HEIGHT / 4;
             BOXPLOT_HEIGHT = HEIGHT / 2;
+            //initialize data set
+            DataSet = new List<int>();
             //initialize shapes for drawing boxplot
             titleTB = new TextBlock() {
                 Foreground = Brushes.White,
@@ -130,7 +133,7 @@ namespace Team20ScoutingClient {
 
         public void Draw() {
             //sort data set in numerical order
-            Array.Sort(DataSet);
+            DataSet.Sort();
             //calculates min, q1, med, q3, & max
             CalculateStatisticsNumbers();
             //scale actual values to pixel values to be displayed
@@ -149,7 +152,7 @@ namespace Team20ScoutingClient {
         }
 
         private void CalculateStatisticsNumbers() {
-            numItems = DataSet.Length;
+            numItems = DataSet.Count;
             //find indexes in data set
             medIndex = numItems / 2;
             q1Index = numItems / 4;

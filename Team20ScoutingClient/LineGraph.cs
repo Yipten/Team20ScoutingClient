@@ -1,11 +1,12 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace Team20ScoutingClient {
-    class LineGraph {
-        public double[] DataSet { get; set; }
+    public class LineGraph {
+        public List<int> DataSet { get; set; }
 
         private readonly string
             TITLE,
@@ -20,7 +21,7 @@ namespace Team20ScoutingClient {
 
         private Polyline line;
 
-        public LineGraph(string title, string xAxisLabel, string yAxisLabel, Canvas canvas, int minValue, int maxValue, int width, int height) {
+        public LineGraph(string title, string xAxisLabel, string yAxisLabel, Canvas canvas, int minValue, int maxValue) {
             //set constants
             TITLE = title;
             X_AXIS_LABEL = xAxisLabel;
@@ -28,8 +29,10 @@ namespace Team20ScoutingClient {
             CANVAS = canvas;
             MIN_VALUE = minValue;
             MAX_VALUE = maxValue;
-            WIDTH = width;
-            HEIGHT = height;
+            WIDTH = (int)canvas.Width;
+            HEIGHT = (int)canvas.Height;
+            //initialize data set
+            DataSet = new List<int>();
             //initialize shapes
             line = new Polyline() {
                 StrokeThickness = 2,
@@ -49,16 +52,16 @@ namespace Team20ScoutingClient {
         }
 
         private void ConvertToPixels() {
-            double scale = (double)HEIGHT / (MAX_VALUE - MIN_VALUE);
-            for (int i = 0; i < DataSet.Length; i++) {
+            int scale = HEIGHT / (MAX_VALUE - MIN_VALUE);
+            for (int i = 0; i < DataSet.Count; i++) {
                 DataSet[i] *= scale;
             }
         }
 
         private void AddPoints() {
             PointCollection points = new PointCollection();
-            double scale = (double)WIDTH / DataSet.Length;
-            for (int i = 0; i < DataSet.Length; i++)
+            double scale = (double)WIDTH / DataSet.Count;
+            for (int i = 0; i < DataSet.Count; i++)
                 points.Add(new Point(scale * i, HEIGHT - DataSet[i]));
             line.Points = points;
         }

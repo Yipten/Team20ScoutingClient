@@ -1,17 +1,20 @@
 ﻿using Microsoft.Win32;
+using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
+using System.Linq;
 using System.Windows;
 
 namespace Team20ScoutingClient {
     public class DBClient {
-        public double[] Data { get; private set; }
+        public List<List<string>> Data { get; private set; }
 
         private readonly string FILE_PATH;
 
         private SQLiteConnection connection;
 
         public DBClient(string filePath) {
+            Data = new List<List<string>>();
             FILE_PATH = filePath;
             //if the file doesn't exist...
             if (!File.Exists(FILE_PATH)) {
@@ -31,40 +34,55 @@ namespace Team20ScoutingClient {
             connection = new SQLiteConnection("Data Source=" + FILE_PATH + "; Version=3");
         }
 
-        public bool GetData(string table, int teamNumber, string columnName) {
+        public bool GetData(string table, string[] columns, string filter = null, string filterValue = null, string orderBy = null) {
             //if the file path was not specified...
             if (FILE_PATH == "") {
                 MessageBox.Show("Database filepath not specified.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
-            //execute query to get requested data
-            string dataString = ExecuteQuery("SELECT " + columnName + " FROM " + table + " WHERE team = " + teamNumber + " ORDER BY id ASC;", true);
-            //if the array is empty...
-            if (dataString == "") {
-                MessageBox.Show("Data could not be fetched.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
+            //build query
+            string query = "";
+            query += "SELECT ";
+            for (int i = 0; i < columns.Length; i ++) {
+                query += columns[i];
+                if (i != columns.Length - 1)
+                    query += ", ";
             }
+            query += " FROM " + table;
+            if (filter != null || filterValue != null)
+                query += " WHERE " + filter + " = " + filterValue;
+            if (orderBy != null)
+                query += " ORDER BY " + orderBy + " ASC";
+            query += ";";
+            //execute query to get requested data
+            List<string> dataString = ExecuteQuery(query, true, columns.Length);
+            //if the array is empty...
+            foreach (string item in dataString)
+                if (item == "")
+                    return false;
+            //clear previous data
+            Data.Clear();
             //separate string by commas
-            string[] dataStringArray = dataString.Split(',');
-            //parse string array into double array
-            Data = new double[dataStringArray.Length - 1];
-            for (int i = 0; i < Data.Length; i++)
-                Data[i] = int.Parse(dataStringArray[i]);
+            for (int i = 0; i < dataString.Count; i ++)
+                Data.Add(dataString[i].Split(',').ToList());
             return true;
         }
 
-        public string ExecuteQuery(string query, bool read) {
+        public List<string> ExecuteQuery(string query, bool read, int numColumns) {
             connection.Open();
             SQLiteCommand command = new SQLiteCommand(query, connection);
             //string to be built and returned
-            string output = "";
+            List<string> output = new List<string>();
+            for (int i = 0; i < numColumns; i++)
+                output.Add("");
             try {
                 if (read) {
                     SQLiteDataReader reader = command.ExecuteReader();
                     while (reader.Read())
-                        output += reader[0] + ",";
+                        for (int i = 0; i < reader.FieldCount; i ++)
+                            output[i] += reader[i] + ",";
                 } else
-                    output = command.ExecuteNonQuery().ToString();
+                    output[0] = command.ExecuteNonQuery().ToString();
             } catch (SQLiteException) {
                 MessageBox.Show("Specified database or table does not exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }

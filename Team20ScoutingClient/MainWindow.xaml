@@ -8,30 +8,46 @@
         Icon="Resources\20-SSG-Whiteletter.png"
         Title="Team 20 Scouting Client" MinWidth="400" MinHeight="225" WindowState="Maximized" FontFamily="Lucida Sans" FontSize="12" Background="Black">
     <Grid>
-        <TabControl Background="Black">
-            <TabItem x:Name="BoxplotTI" GotFocus="BoxplotTI_GotFocus">
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Boxplot"/>
-                    </StackPanel>
-                </TabItem.Header>
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Vertical">
+            <TabControl Background="Black" BorderThickness="0">
+                <TabItem x:Name="BoxplotTI">
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Boxplot"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                        <StackPanel Orientation="Vertical">
+                            <Canvas x:Name="Team1SwitchBP" Width="400" Height="150" HorizontalAlignment="Left" Margin="5"/>
+                            <Canvas x:Name="Team1ScaleBP" Width="400" Height="150" HorizontalAlignment="Left" Margin="5"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem x:Name="LinegraphTI">
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Line Graph"/>
+                        </StackPanel>
+                    </TabItem.Header>
                     <StackPanel Orientation="Vertical">
-                        <Canvas x:Name="Team1SwitchBP" Width="400" Height="150" HorizontalAlignment="Left" Margin="5"/>
-                        <Canvas x:Name="Team1ScaleBP" Width="400" Height="150" HorizontalAlignment="Left" Margin="5"/>
+                        <Canvas x:Name="Team1SwitchLG" Width="300" Height="200" HorizontalAlignment="Left" Margin="5"/>
                     </StackPanel>
-                </ScrollViewer>
-            </TabItem>
-            <TabItem x:Name="LinegraphTI" GotFocus="LinegraphTI_GotFocus">
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Line Graph"/>
+                </TabItem>
+                <TabItem Header="Teams">
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <ComboBox x:Name="TeamCB" SelectionChanged="TeamCB_SelectionChanged"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="TeamsTabTitle" Foreground="White" FontSize="24"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Canvas x:Name="TeamCargoDeliverShipCanvas" Width="400" Height="150" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
+                        </StackPanel>
                     </StackPanel>
-                </TabItem.Header>
-                <StackPanel Orientation="Vertical">
-                    <Canvas x:Name="Team1SwitchLG" Width="300" Height="200" HorizontalAlignment="Left" Margin="5"/>
-                </StackPanel>
-            </TabItem>
-        </TabControl>
+                </TabItem>
+            </TabControl>
+            <Button x:Name="RefreshButton" Content="Refresh" Click="RefreshButton_Click" Width="75" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
+        </StackPanel>
     </Grid>
 </Window>
