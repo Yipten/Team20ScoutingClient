@@ -17,18 +17,16 @@ namespace Team20ScoutingClient {
             Data = new List<List<string>>();
             FILE_PATH = filePath;
             //if the file doesn't exist...
-            if (!File.Exists(FILE_PATH)) {
-                if (MessageBox.Show("Database file at location \"" + filePath + "\" does not exist.\n\nDo you want to manually locate the file?", "Error", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes) {
-                    OpenFileDialog openFileDialog = new OpenFileDialog {
-                        InitialDirectory = "C:\\",
-                        Filter = "SQLite database files (*.db; *.db3; *.sqlite; *.sqlite3)|*.db; *.db3; *.sqlite; *.sqlite3 | All files (*.*)|*.*",
-                        FilterIndex = 1
-                    };
-                    if (openFileDialog.ShowDialog() == true) {
-                        FILE_PATH = openFileDialog.FileName;
-                    }
-                } else
-                    FILE_PATH = "";
+            while (!File.Exists(FILE_PATH)) {
+                MessageBox.Show("Database file at location \"" + filePath + "\" does not exist.\n\nPlease manually locate the file.", "File not found", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                OpenFileDialog openFileDialog = new OpenFileDialog {
+                    InitialDirectory = "C:\\",
+                    Filter = "SQLite database files (*.db; *.db3; *.sqlite; *.sqlite3)|*.db; *.db3; *.sqlite; *.sqlite3 | All files (*.*)|*.*",
+                    FilterIndex = 1
+                };
+                if (openFileDialog.ShowDialog() == true) {
+                    FILE_PATH = openFileDialog.FileName;
+                }
             }
             //connect to database
             connection = new SQLiteConnection("Data Source=" + FILE_PATH + "; Version=3");

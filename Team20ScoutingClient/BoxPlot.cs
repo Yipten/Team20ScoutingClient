@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace Team20ScoutingClient {
     public class BoxPlot {
-        public List<int> DataSet { get; set; }
+        public List<int> DataSet { get; private set; }
 
         private readonly string TITLE;
         private readonly Canvas CANVAS;
@@ -129,6 +129,15 @@ namespace Team20ScoutingClient {
             minLine.StrokeThickness = lowerLine.StrokeThickness = upperLine.StrokeThickness = maxLine.StrokeThickness = lowerBox.StrokeThickness = upperBox.StrokeThickness = 2;
             minLine.Stroke = lowerLine.Stroke = upperLine.Stroke = maxLine.Stroke = lowerBox.Stroke = upperBox.Stroke = Brushes.White;
             lowerBox.Fill = upperBox.Fill = Brushes.Gray;
+
+            CANVAS.MouseDown += MouseDown;
+        }
+
+        private void MouseDown(object sender, MouseButtonEventArgs e) {
+            if (e.ClickCount == 2) {
+                DetailWindow detailWindow = new DetailWindow(this.ToString()) { Owner = Application.Current.MainWindow };
+                detailWindow.Show();
+            }
         }
 
         public void Draw() {
@@ -142,7 +151,8 @@ namespace Team20ScoutingClient {
             SetPoints();
             //delete all currently existing children of canvas
             CANVAS.Children.Clear();
-            //TODO: center text on coordinate
+            //add an invisible rectangle to allow for clicking
+            CANVAS.Children.Add(new Rectangle() { Width = CANVAS.Width, Height = CANVAS.Height, Fill = Brushes.Transparent });
             //add text blocks to canvas
             foreach (TextBlock textBlock in GetTextBlocks())
                 CANVAS.Children.Add(textBlock);
@@ -153,16 +163,19 @@ namespace Team20ScoutingClient {
 
         private void CalculateStatisticsNumbers() {
             numItems = DataSet.Count;
-            //find indexes in data set
-            medIndex = numItems / 2;
-            q1Index = numItems / 4;
-            q3Index = medIndex + q1Index;
-            //calculations for finding statistics numbers
-            min = DataSet.Min();
-            q1 = medIndex % 2 == 0 ? DataSet[q1Index] : (DataSet[q1Index] + DataSet[q1Index + 1]) / 2;
-            med = numItems % 2 == 0 ? (DataSet[medIndex] + DataSet[medIndex - 1]) / 2 : DataSet[medIndex];
-            q3 = medIndex % 2 == 0 ? DataSet[q3Index] : (DataSet[q3Index] + DataSet[q3Index + 1]) / 2;
-            max = DataSet.Max();
+            if (numItems > 2) {
+                //find indexes in data set
+                medIndex = numItems / 2;
+                q1Index = numItems / 4;
+                q3Index = medIndex + q1Index;
+                //calculations for finding statistics numbers
+                min = DataSet.Min();
+                q1 = medIndex % 2 == 0 ? DataSet[q1Index] : (DataSet[q1Index] + DataSet[q1Index + 1]) / 2;
+                med = numItems % 2 == 0 ? (DataSet[medIndex] + DataSet[medIndex - 1]) / 2 : DataSet[medIndex];
+                q3 = medIndex % 2 == 0 ? DataSet[q3Index] : (DataSet[q3Index] + DataSet[q3Index + 1]) / 2;
+                max = DataSet.Max();
+            } else
+                MessageBox.Show("There are not enough entries to generate a boxplot for \"" + TITLE + "\"", "Insufficient Data", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void ConvertToPixels() {
@@ -214,6 +227,13 @@ namespace Team20ScoutingClient {
         private Shape[] GetShapes() {
             Shape[] shapes = { minLine, lowerLine, lowerBox, upperBox, upperLine, maxLine };
             return shapes;
+        }
+
+        public override string ToString() {
+            string output = "";
+            foreach (int item in DataSet)
+                output += item + "\n";
+            return output;
         }
     }
 }
