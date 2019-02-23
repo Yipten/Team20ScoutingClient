@@ -82,7 +82,7 @@ namespace Team20ScoutingClient {
                 } else
                     output[0] = command.ExecuteNonQuery().ToString();
             } catch (SQLiteException) {
-                MessageBox.Show("Specified database or table does not exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("The specified database or table does not exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             connection.Close();
             return output;
