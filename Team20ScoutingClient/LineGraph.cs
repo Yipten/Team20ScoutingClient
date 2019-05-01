@@ -22,12 +22,9 @@ namespace Team20ScoutingClient {
             MAX_VALUE,
             GRAPH_MARGIN,
             GRAPH_HEIGHT;
-        private readonly string
-            TITLE,
-            X_AXIS_LABEL,
-            Y_AXIS_LABEL;
+        private readonly string TITLE;
 
-        public LineGraph(Canvas canvas, int minValue, int maxValue, string title, string xAxisLabel, string yAxisLabel) {
+        public LineGraph(Canvas canvas, int minValue, int maxValue, string title) {
             LinePlots = new List<LinePlot>();
             titleTB = new TextBlock() {
                 FontSize = 14,
@@ -57,8 +54,6 @@ namespace Team20ScoutingClient {
             MIN_VALUE = minValue;
             MAX_VALUE = maxValue;
             TITLE = title;
-            X_AXIS_LABEL = xAxisLabel;
-            Y_AXIS_LABEL = yAxisLabel;
 
             CANVAS.MouseDown += MouseDown;
         }
