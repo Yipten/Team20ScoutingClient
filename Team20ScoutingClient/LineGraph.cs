@@ -60,7 +60,7 @@ namespace Team20ScoutingClient {
 
         private void MouseDown(object sender, MouseButtonEventArgs e) {
             if (e.ClickCount == 2) {
-                DetailWindow detailWindow = new DetailWindow(this.ToString()) { Owner = Application.Current.MainWindow };
+                DetailWindow detailWindow = new DetailWindow(ToString()) { Owner = Application.Current.MainWindow };
                 detailWindow.Show();
             }
         }
