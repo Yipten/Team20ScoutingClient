@@ -24,7 +24,7 @@ namespace Team20ScoutingClient {
             GRAPH_HEIGHT;
         private readonly string TITLE;
 
-        public LineGraph(Canvas canvas, int minValue, int maxValue, string title) {
+        public LineGraph(ref Canvas canvas, int minValue, int maxValue, string title) {
             LinePlots = new List<LinePlot>();
             titleTB = new TextBlock() {
                 FontSize = 14,

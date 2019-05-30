@@ -4,7 +4,8 @@ using System.Windows.Media;
 
 namespace Team20ScoutingClient {
     public partial class MainWindow : Window {
-        private DBClient client;
+        private DBClient db;
+		private BTClient bt;
 
         private LineGraph[] teamLineGraphs;
         private LineGraph teamSandstormCargo;
@@ -13,9 +14,10 @@ namespace Team20ScoutingClient {
         private LineGraph teamTeleopPanel;
 
         public MainWindow() {
-            InitializeComponent();
+			InitializeComponent();
 
-            client = new DBClient("C:\\Users\\Andrew\\source\\repos\\Team20ScoutingClient\\2019ScoutingData.sqlite");
+            db = new DBClient("C:\\Users\\Andrew\\source\\repos\\Team20ScoutingClient\\2019ScoutingData.sqlite");
+			bt = new BTClient(ref BTStatus);
 
             InitTabs();
             RefreshTabs();
@@ -27,6 +29,7 @@ namespace Team20ScoutingClient {
 
         private void InitTabs() {
             InitTeamsTab();
+			InitDataTab();
         }
 
         private void RefreshTabs() {
@@ -38,58 +41,59 @@ namespace Team20ScoutingClient {
         }
 
         private void InitTeamsTab() {
-            teamSandstormCargo = new LineGraph(teamSandstormCargoCanvas, 0, 10, "Cargo in Sandstorm");
-            teamSandstormPanel = new LineGraph(teamSandstormPanelCanvas, 0, 10, "Hatch Panels in Sandstorm");
-            teamTeleopCargo = new LineGraph(teamTeleopCargoCanvas, 0, 10, "Cargo in Teleop");
-            teamTeleopPanel = new LineGraph(teamTeleopPanelCanvas, 0, 10, "Hatch Panels in Teleop");
+            teamSandstormCargo = new LineGraph(ref teamSandstormCargoCanvas, 0, 10, "Cargo in Sandstorm");
+            teamSandstormPanel = new LineGraph(ref teamSandstormPanelCanvas, 0, 10, "Hatch Panels in Sandstorm");
+            teamTeleopCargo = new LineGraph(ref teamTeleopCargoCanvas, 0, 10, "Cargo in Teleop");
+            teamTeleopPanel = new LineGraph(ref teamTeleopPanelCanvas, 0, 10, "Hatch Panels in Teleop");
             teamLineGraphs = new LineGraph[] { teamSandstormCargo, teamSandstormPanel, teamTeleopCargo, teamTeleopPanel };
-            if (client.GetData("teams", new string[] { "number", "name" }, orderBy: "number")) {
+            if (db.GetData("teams", new string[] { "number", "name" }, orderBy: "number")) {
                 TeamCB.Items.Clear();
-                for (int i = 0; i < client.Data[0].Count - 1; i++)
-                    TeamCB.Items.Add(client.Data[0][i]); // + " - " + client.Data[1][i]);
+                for (int i = 0; i < db.Data[0].Count - 1; i++)
+                    TeamCB.Items.Add(db.Data[0][i]); // + " - " + client.Data[1][i]);
                 TeamCB.SelectedItem = TeamCB.Items[0];
             }
         }
 
         private void RefreshTeamsTab() {
-            if (client.GetData("teams", new string[] { "number", "name" }, filter: "number", filterValue: TeamCB.SelectedItem.ToString())) {
-                TeamsTabTitle.Text = client.Data[0][0] + " - " + client.Data[1][0];
+            if (db.GetData("teams", new string[] { "number", "name" }, filter: "number", filterValue: TeamCB.SelectedItem.ToString())) {
+                TeamsTabTitle.Text = db.Data[0][0] + " - " + db.Data[1][0];
             }
             foreach (LineGraph lineGraph in teamLineGraphs)
                 lineGraph.LinePlots.Clear();
-            if (client.GetData("sandstorm", new string[] { "cargoCollect", "cargoDeliverShip", "cargoDeliverRocket", "cargoDrop" }, filter: "team", filterValue: TeamCB.SelectedItem.ToString(), orderBy: "match")) {
-                teamSandstormCargo.LinePlots.Add(new LinePlot(client.Data[0], Brushes.Yellow, false));
-                teamSandstormCargo.LinePlots.Add(new LinePlot(client.Data[1], Brushes.Green, true));
-                teamSandstormCargo.LinePlots.Add(new LinePlot(client.Data[2], Brushes.Green, false));
-                teamSandstormCargo.LinePlots.Add(new LinePlot(client.Data[3], Brushes.Red, false));
+            if (db.GetData("sandstorm", new string[] { "cargoCollect", "cargoDeliverShip", "cargoDeliverRocket", "cargoDrop" }, filter: "team", filterValue: TeamCB.SelectedItem.ToString(), orderBy: "match")) {
+                teamSandstormCargo.LinePlots.Add(new LinePlot(db.Data[0], Brushes.Yellow, false));
+                teamSandstormCargo.LinePlots.Add(new LinePlot(db.Data[1], Brushes.Green, true));
+                teamSandstormCargo.LinePlots.Add(new LinePlot(db.Data[2], Brushes.Green, false));
+                teamSandstormCargo.LinePlots.Add(new LinePlot(db.Data[3], Brushes.Red, false));
             }
-            if (client.GetData("sandstorm", new string[] { "panelCollectStation", "panelCollectFloor", "panelDeliverShip", "panelDeliverRocket", "panelDrop" }, filter: "team", filterValue: TeamCB.SelectedItem.ToString(), orderBy: "match")) {
-                teamSandstormPanel.LinePlots.Add(new LinePlot(client.Data[0], Brushes.Yellow, false));
-                teamSandstormPanel.LinePlots.Add(new LinePlot(client.Data[1], Brushes.Yellow, true));
-                teamSandstormPanel.LinePlots.Add(new LinePlot(client.Data[2], Brushes.Green, true));
-                teamSandstormPanel.LinePlots.Add(new LinePlot(client.Data[3], Brushes.Green, false));
-                teamSandstormPanel.LinePlots.Add(new LinePlot(client.Data[4], Brushes.Red, false));
+            if (db.GetData("sandstorm", new string[] { "panelCollectStation", "panelCollectFloor", "panelDeliverShip", "panelDeliverRocket", "panelDrop" }, filter: "team", filterValue: TeamCB.SelectedItem.ToString(), orderBy: "match")) {
+                teamSandstormPanel.LinePlots.Add(new LinePlot(db.Data[0], Brushes.Yellow, false));
+                teamSandstormPanel.LinePlots.Add(new LinePlot(db.Data[1], Brushes.Yellow, true));
+                teamSandstormPanel.LinePlots.Add(new LinePlot(db.Data[2], Brushes.Green, true));
+                teamSandstormPanel.LinePlots.Add(new LinePlot(db.Data[3], Brushes.Green, false));
+                teamSandstormPanel.LinePlots.Add(new LinePlot(db.Data[4], Brushes.Red, false));
             }
-            if (client.GetData("teleop", new string[] { "cargoCollectStation", "cargoCollectFloor", "cargoDeliverShip", "cargoDeliverRocket", "cargoDrop" }, filter: "team", filterValue: TeamCB.SelectedItem.ToString(), orderBy: "match")) {
-                teamTeleopCargo.LinePlots.Add(new LinePlot(client.Data[0], Brushes.Yellow, false));
-                teamTeleopCargo.LinePlots.Add(new LinePlot(client.Data[1], Brushes.Yellow, true));
-                teamTeleopCargo.LinePlots.Add(new LinePlot(client.Data[2], Brushes.Green, true));
-                teamTeleopCargo.LinePlots.Add(new LinePlot(client.Data[3], Brushes.Green, false));
-                teamTeleopCargo.LinePlots.Add(new LinePlot(client.Data[4], Brushes.Red, false));
+            if (db.GetData("teleop", new string[] { "cargoCollectStation", "cargoCollectFloor", "cargoDeliverShip", "cargoDeliverRocket", "cargoDrop" }, filter: "team", filterValue: TeamCB.SelectedItem.ToString(), orderBy: "match")) {
+                teamTeleopCargo.LinePlots.Add(new LinePlot(db.Data[0], Brushes.Yellow, false));
+                teamTeleopCargo.LinePlots.Add(new LinePlot(db.Data[1], Brushes.Yellow, true));
+                teamTeleopCargo.LinePlots.Add(new LinePlot(db.Data[2], Brushes.Green, true));
+                teamTeleopCargo.LinePlots.Add(new LinePlot(db.Data[3], Brushes.Green, false));
+                teamTeleopCargo.LinePlots.Add(new LinePlot(db.Data[4], Brushes.Red, false));
             }
-            if (client.GetData("teleop", new string[] { "panelCollectStation", "panelCollectFloor", "panelDeliverShip", "panelDeliverRocket", "panelDrop" }, filter: "team", filterValue: TeamCB.SelectedItem.ToString(), orderBy: "match")) {
-                teamTeleopPanel.LinePlots.Add(new LinePlot(client.Data[0], Brushes.Yellow, false));
-                teamTeleopPanel.LinePlots.Add(new LinePlot(client.Data[1], Brushes.Yellow, true));
-                teamTeleopPanel.LinePlots.Add(new LinePlot(client.Data[2], Brushes.Green, true));
-                teamTeleopPanel.LinePlots.Add(new LinePlot(client.Data[3], Brushes.Green, false));
-                teamTeleopPanel.LinePlots.Add(new LinePlot(client.Data[4], Brushes.Red, false));
+            if (db.GetData("teleop", new string[] { "panelCollectStation", "panelCollectFloor", "panelDeliverShip", "panelDeliverRocket", "panelDrop" }, filter: "team", filterValue: TeamCB.SelectedItem.ToString(), orderBy: "match")) {
+                teamTeleopPanel.LinePlots.Add(new LinePlot(db.Data[0], Brushes.Yellow, false));
+                teamTeleopPanel.LinePlots.Add(new LinePlot(db.Data[1], Brushes.Yellow, true));
+                teamTeleopPanel.LinePlots.Add(new LinePlot(db.Data[2], Brushes.Green, true));
+                teamTeleopPanel.LinePlots.Add(new LinePlot(db.Data[3], Brushes.Green, false));
+                teamTeleopPanel.LinePlots.Add(new LinePlot(db.Data[4], Brushes.Red, false));
             }
             foreach (LineGraph lineGraph in teamLineGraphs)
                 lineGraph.Draw();
         }
 
 		private void InitDataTab() {
-
+			EnableReceivingButton.IsEnabled = true;
+			DisableReceivingButton.IsEnabled = false;
 		}
 
 		private void RefreshDataTab() {
@@ -97,11 +101,17 @@ namespace Team20ScoutingClient {
 		}
 
 		private void EnableReceivingButton_Click(object sender, RoutedEventArgs e) {
-
+			if (bt.StartListening()) {
+				EnableReceivingButton.IsEnabled = false;
+				DisableReceivingButton.IsEnabled = true;
+			}
+			
 		}
 
 		private void DisableReceivingButton_Click(object sender, RoutedEventArgs e) {
-
+			bt.StopListening();
+			EnableReceivingButton.IsEnabled = true;
+			DisableReceivingButton.IsEnabled = false;
 		}
 	}
 }
