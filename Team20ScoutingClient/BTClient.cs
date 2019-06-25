@@ -1,51 +1,46 @@
 ﻿using InTheHand.Net;
 using InTheHand.Net.Bluetooth;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace Team20ScoutingClient {
 	class BTClient {
-		private ObexListener listener;
-		private TextBlock status;
+		private TextBlock statusDisplay;
 
+		private string filePath;
+		private int numReceiving;
 		private string[] statusItems;
 
-		public BTClient(ref TextBlock statusDisplay) {
-			listener = new ObexListener(ObexTransport.Bluetooth);
-			status = statusDisplay;
-			statusItems = new string[1];
-		}
-
-		public bool StartListening() {
-			if (!BluetoothRadio.IsSupported) {
-				MessageBox.Show("Bluetooth must be enabled on your device for this function to work", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-				return false;
-			}
-			listener = new ObexListener(ObexTransport.Bluetooth);
-			statusItems[0] = "enabled";
-			UpdateStatus();
-			return true;
-		}
-
-		public void StopListening() {
-			listener.Close();
+		public BTClient(string filePath, ref TextBlock statusDisplay) {
+			this.filePath = filePath;
+			this.statusDisplay = statusDisplay;
+			numReceiving = 0;
+			statusItems = new string[2];
 			statusItems[0] = "disabled";
-			UpdateStatus();
 		}
 
-		public void StartReceiving() {
-
-		}
-
-		public void StopReceiving() {
-
-		}
-
-		private void UpdateStatus() {
-			string s = "";
-			foreach (string item in statusItems)
-				s += item + "\n";
-			status.Text = s;
+		public async void ReceiveFile() {
+			if (BluetoothRadio.IsSupported) {
+				if (numReceiving < 6) {
+					statusDisplay.Text = (++numReceiving).ToString();
+					BluetoothRadio.PrimaryRadio.Mode = RadioMode.Connectable;
+					await Task.Run(() => {
+						ObexListener listener = new ObexListener(ObexTransport.Bluetooth);
+						listener.Start();
+						ObexListenerContext context = listener.GetContext();
+						ObexListenerRequest request = context.Request;
+						string[] pathSplits = request.RawUrl.Split('/');
+						string fileName = pathSplits[pathSplits.Length - 1];
+						request.WriteFile(filePath + fileName);
+						listener.Stop();
+						listener.Close();
+					});
+					statusDisplay.Text = (--numReceiving).ToString();
+				} else
+					MessageBox.Show("Number of pending transfers is limited to 6", "FYI", MessageBoxButton.OK, MessageBoxImage.Information);
+			} else
+				MessageBox.Show("Bluetooth must be enabled on your device for this function to work", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 		}
 	}
 }
