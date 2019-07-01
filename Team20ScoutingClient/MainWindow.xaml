@@ -26,6 +26,7 @@
 							<Canvas x:Name="teamTeleopCargoCanvas" Width="400" Height="150" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
 							<Canvas x:Name="teamTeleopPanelCanvas" Width="400" Height="150" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
 						</StackPanel>
+						<TextBlock x:Name="testStatTB" Foreground="White"/>
 					</StackPanel>
 				</TabItem>
 				<TabItem Header="Data Management">

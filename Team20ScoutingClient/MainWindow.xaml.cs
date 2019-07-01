@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -14,11 +14,17 @@ namespace Team20ScoutingClient {
 		private LineGraph teamTeleopCargo;
 		private LineGraph teamTeleopPanel;
 
+		private Stat testStat;
+
+		private bool init;
+
 		public MainWindow() {
 			InitializeComponent();
 
-			db = new DBClient("C:\\Users\\Andrew\\source\\repos\\Team20ScoutingClient\\2019ScoutingData.sqlite");
-			bt = new BTClient("C:\\Users\\Andrew\\Desktop\\", ref BTStatus);
+			db = new DBClient("C:/Users/Andrew/source/repos/Team20ScoutingClient/2019ScoutingData.sqlite");
+			bt = new BTClient("C:/Users/Andrew/Desktop/", ref BTStatus);
+
+			init = false;
 
 			InitTabs();
 			RefreshTabs();
@@ -31,6 +37,7 @@ namespace Team20ScoutingClient {
 		private void InitTabs() {
 			InitTeamsTab();
 			InitDataTab();
+			init = true;
 		}
 
 		private void RefreshTabs() {
@@ -39,7 +46,8 @@ namespace Team20ScoutingClient {
 		}
 
 		private void TeamCB_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-			RefreshTeamsTab();
+			if (init)
+				RefreshTeamsTab();
 		}
 
 		private void InitTeamsTab() {
@@ -54,12 +62,23 @@ namespace Team20ScoutingClient {
 					TeamCB.Items.Add(db.Data[0][i]); // + " - " + client.Data[1][i]);
 				TeamCB.SelectedItem = TeamCB.Items[0];
 			}
+
+			testStat = new Stat(() => {
+				db.GetData("teleop", new string[] { "cargoDeliverShip" }, filter: "team", filterValue: TeamCB.SelectedItem.ToString());
+				return db.Data[0];
+			},
+			x => {
+				double total = 0;
+				foreach (double item in x)
+					total += item;
+				return Math.Round(total / x.Count, 2);
+			},
+			"avg tele cargo to ship", "cargo balls");
 		}
 
 		private void RefreshTeamsTab() {
-			if (db.GetData("teams", new string[] { "number", "name" }, filter: "number", filterValue: TeamCB.SelectedItem.ToString())) {
+			if (db.GetData("teams", new string[] { "number", "name" }, filter: "number", filterValue: TeamCB.SelectedItem.ToString()))
 				TeamsTabTitle.Text = db.Data[0][0] + " - " + db.Data[1][0];
-			}
 			foreach (LineGraph lineGraph in teamLineGraphs)
 				lineGraph.LinePlots.Clear();
 			if (db.GetData("sandstorm", new string[] { "cargoCollect", "cargoDeliverShip", "cargoDeliverRocket", "cargoDrop" }, filter: "team", filterValue: TeamCB.SelectedItem.ToString(), orderBy: "match")) {
@@ -91,6 +110,9 @@ namespace Team20ScoutingClient {
 			}
 			foreach (LineGraph lineGraph in teamLineGraphs)
 				lineGraph.Draw();
+
+			testStat.Calculate();
+			testStatTB.Text = testStat.ToString();
 		}
 
 		private void InitDataTab() {
