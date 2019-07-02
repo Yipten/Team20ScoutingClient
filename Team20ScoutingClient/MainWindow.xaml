@@ -10,7 +10,12 @@
 	<Grid>
 		<StackPanel Orientation="Vertical">
 			<TabControl Background="Black" BorderThickness="0">
-				<TabItem Header="Teams">
+				<TabItem Header="Team Stats">
+					<StackPanel Orientation="Vertical" Margin="5">
+						<TextBlock x:Name="testStatTB" Foreground="White"/>
+					</StackPanel>
+				</TabItem>
+				<TabItem Header="Team Trends">
 					<StackPanel Orientation="Vertical" Margin="5">
 						<StackPanel Orientation="Horizontal">
 							<ComboBox x:Name="TeamCB" SelectionChanged="TeamCB_SelectionChanged" VerticalContentAlignment="Center" Height="25" Margin="5"/>
@@ -26,8 +31,16 @@
 							<Canvas x:Name="teamTeleopCargoCanvas" Width="400" Height="150" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
 							<Canvas x:Name="teamTeleopPanelCanvas" Width="400" Height="150" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
 						</StackPanel>
-						<TextBlock x:Name="testStatTB" Foreground="White"/>
 					</StackPanel>
+				</TabItem>
+				<TabItem Header="Match History">
+
+				</TabItem>
+				<TabItem Header="Match Predictions">
+
+				</TabItem>
+				<TabItem Header="Scoring">
+
 				</TabItem>
 				<TabItem Header="Data Management">
 					<StackPanel Orientation="Vertical" Margin="5">
