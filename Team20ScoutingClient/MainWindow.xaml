@@ -3,8 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Team20ScoutingClient"
-        mc:Ignorable="d"
+		mc:Ignorable="d"
         Icon="Resources\20-SSG-Whiteletter.png"
         Title="Team 20 Scouting Client" MinWidth="400" MinHeight="225" WindowState="Maximized" FontFamily="Lucida Sans" FontSize="12" Background="Black">
 	<Grid>
@@ -12,13 +11,23 @@
 			<TabControl Background="Black" BorderThickness="0">
 				<TabItem Header="Team Stats">
 					<StackPanel Orientation="Vertical" Margin="5">
+						<StackPanel Orientation="Horizontal">
+							<ComboBox x:Name="TeamStatsSelection" SelectionChanged="TeamStatsSelection_SelectionChanged" VerticalContentAlignment="Center" Height="25" Margin="5"/>
+						</StackPanel>
+						<StackPanel Orientation="Horizontal">
+							<StackPanel Orientation="Vertical">
+								<TextBlock Text="Cross Hab Line %" Foreground="White" FontWeight="Bold" Margin="5"/>
+								<TextBlock x:Name="habLineL1" Foreground="White" Margin="5"/>
+							</StackPanel>
+						</StackPanel>
+
 						<TextBlock x:Name="testStatTB" Foreground="White"/>
 					</StackPanel>
 				</TabItem>
 				<TabItem Header="Team Trends">
 					<StackPanel Orientation="Vertical" Margin="5">
 						<StackPanel Orientation="Horizontal">
-							<ComboBox x:Name="TeamCB" SelectionChanged="TeamCB_SelectionChanged" VerticalContentAlignment="Center" Height="25" Margin="5"/>
+							<ComboBox x:Name="TeamTrendsSelection" SelectionChanged="TeamTrendsSelection_SelectionChanged" VerticalContentAlignment="Center" Height="25" Margin="5"/>
 						</StackPanel>
 						<StackPanel Orientation="Horizontal">
 							<TextBlock x:Name="TeamsTabTitle" Foreground="White" FontSize="24" Margin="5"/>
