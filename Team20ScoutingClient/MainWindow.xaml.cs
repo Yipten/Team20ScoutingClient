@@ -42,42 +42,149 @@ namespace Team20ScoutingClient {
 
 		#region Team Stats
 		private Stat[] stats;
-		private Stat habLineL1Stat;
-		private Stat testStat;
+		private Stat
+			//percent success
+			habLineL1Stat,
+			habLineL2Stat,
+			climbL1Stat,
+			climbL2Stat,
+			climbL3Stat,
+			//average per match
+			scoreTotalStat,
+			scoreL1Stat,
+			scoreL2Stat,
+			scoreL3Stat,
+			droppedStat,
+			climbPointsStat,
+			pointsStat,
+			foulsStat,
+			defenseStat,
+			breakdownsStat,
+			//maximum
+			maxScoreStat,
+			maxPointsStat;
 
 		private void InitTeamStatsTab() {
-			//habLineL1Stat = new Stat();
-			testStat = new Stat(() => {
-				db.GetData("teleop", new string[] { "cargoDeliverShip" }, filter: "team", filterValue: TeamTrendsSelection.SelectedItem.ToString());
-				return db.Data[0];
-			}, x => {
-				double total = 0;
-				foreach (double item in x)
-					total += item;
-				return Math.Round(total / x.Count, 2);
-			}, "avg tele cargo to ship", "cargo balls");
-			stats = new Stat[] { habLineL1Stat, testStat };
+			habLineL1Stat = new Stat(ref habLineL1TB, "L1", "%", () => {
+				if (db.GetData("RawData", new string[] { "StartPosition", "CrossHabLine" }, filter: "TeamNumber", filterValue: TeamStatsSelection.SelectedItem.ToString(), orderBy: "MatchNumber")) {
+					int freq = 0;
+					int count = 0;
+					int total = db.Data[0].Count;
+					for (int i = 0; i < total; i++)
+						if (db.Data[0][i] == "3" || db.Data[0][i] == "4" || db.Data[0][i] == "5") {
+							count++;
+							if (db.Data[1][i] == "1")
+								freq++;
+						}
+					if (count == 0)
+						return null;
+					return Math.Round((double)freq / count * 100, 2);
+				}
+				return null;
+			});
+			habLineL2Stat = new Stat(ref habLineL2TB, "L2", "%", () => {
+				if (db.GetData("RawData", new string[] { "StartPosition", "CrossHabLine" }, filter: "TeamNumber", filterValue: TeamStatsSelection.SelectedItem.ToString(), orderBy: "MatchNumber")) {
+					int freq = 0;
+					int count = 0;
+					int total = db.Data[0].Count;
+					for (int i = 0; i < total; i++)
+						if (db.Data[0][i] == "1" || db.Data[0][i] == "2") {
+							count++;
+							if (db.Data[1][i] == "1")
+								freq++;
+						}
+					if (count == 0)
+						return null;
+					return Math.Round((double)freq / count * 100, 2);
+				}
+				return null;
+			});
+			climbL1Stat = new Stat(ref climbL1TB, "L1", "%", () => {
+				if (db.GetData("RawData", new string[] { "HabLevelAchieved", "HabLevelAttempted" }, filter: "TeamNumber", filterValue: TeamStatsSelection.SelectedItem.ToString(), orderBy: "MatchNumber")) {
+					int achieved = 0;
+					int attempted = 0;
+					int total = db.Data[0].Count;
+					for (int i = 0; i < total; i++) {
+						if (db.Data[0][i] == "1")
+							achieved++;
+						if (db.Data[1][i] == "1")
+							attempted++;
+					}
+					if (attempted == 0)
+						return null;
+					return Math.Round((double)achieved / attempted * 100, 2);
+				}
+				return null;
+			});
+			climbL2Stat = new Stat(ref climbL2TB, "L1", "%", () => {
+				if (db.GetData("RawData", new string[] { "HabLevelAchieved", "HabLevelAttempted" }, filter: "TeamNumber", filterValue: TeamStatsSelection.SelectedItem.ToString(), orderBy: "MatchNumber")) {
+					int achieved = 0;
+					int attempted = 0;
+					int total = db.Data[0].Count;
+					for (int i = 0; i < total; i++) {
+						if (db.Data[0][i] == "2")
+							achieved++;
+						if (db.Data[1][i] == "2")
+							attempted++;
+					}
+					if (attempted == 0)
+						return null;
+					return Math.Round((double)achieved / attempted * 100, 2);
+				}
+				return null;
+			});
+			climbL3Stat = new Stat(ref climbL3TB, "L1", "%", () => {
+				if (db.GetData("RawData", new string[] { "HabLevelAchieved", "HabLevelAttempted" }, filter: "TeamNumber", filterValue: TeamStatsSelection.SelectedItem.ToString(), orderBy: "MatchNumber")) {
+					int achieved = 0;
+					int attempted = 0;
+					int total = db.Data[0].Count;
+					for (int i = 0; i < total; i++) {
+						if (db.Data[0][i] == "3")
+							achieved++;
+						if (db.Data[1][i] == "3")
+							attempted++;
+					}
+					if (attempted == 0)
+						return null;
+					return Math.Round((double)achieved / attempted * 100, 2);
+				}
+				return null;
+			});
+			stats = new Stat[] { habLineL1Stat, habLineL2Stat, climbL1Stat, climbL2Stat, climbL3Stat };
+			if (db.GetData("teams", new string[] { "number", "name" }, orderBy: "number")) {
+				TeamStatsSelection.Items.Clear();
+				foreach (string item in db.Data[0])
+					TeamStatsSelection.Items.Add(item);
+				TeamStatsSelection.SelectedItem = TeamStatsSelection.Items[0];
+			}
 		}
 
 		private void RefreshTeamStatsTab() {
 			foreach (Stat s in stats)
 				s.Calculate();
-			testStatTB.Text = testStat.ToString();
 		}
 
 		private void TeamStatsSelection_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 			if (init)
 				RefreshTeamStatsTab();
 		}
+
+		private List<double> ConvertList(List<string> stringList) {
+			List<double> doubleList = new List<double>();
+			foreach (string str in stringList)
+				if (str != "")
+					doubleList.Add(int.Parse(str));
+			return doubleList;
+		}
 		#endregion
 
 		#region Team Trends
-		//TODO: make LineGraph similar to Stat by having function passed in constructor
 		private LineGraph[] teamLineGraphs;
-		private LineGraph teamSandstormCargo;
-		private LineGraph teamSandstormPanel;
-		private LineGraph teamTeleopCargo;
-		private LineGraph teamTeleopPanel;
+		private LineGraph
+			teamSandstormCargo,
+			teamSandstormPanel,
+			teamTeleopCargo,
+			teamTeleopPanel;
 
 		private void InitTeamTrendsTab() {
 			teamSandstormCargo = new LineGraph(ref teamSandstormCargoCanvas, 0, 10, "Cargo in Sandstorm");
@@ -87,8 +194,8 @@ namespace Team20ScoutingClient {
 			teamLineGraphs = new LineGraph[] { teamSandstormCargo, teamSandstormPanel, teamTeleopCargo, teamTeleopPanel };
 			if (db.GetData("teams", new string[] { "number", "name" }, orderBy: "number")) {
 				TeamTrendsSelection.Items.Clear();
-				for (int i = 0; i < db.Data[0].Count - 1; i++)
-					TeamTrendsSelection.Items.Add(db.Data[0][i]);
+				foreach (string item in db.Data[0])
+					TeamTrendsSelection.Items.Add(item);
 				TeamTrendsSelection.SelectedItem = TeamTrendsSelection.Items[0];
 			}
 		}
@@ -155,7 +262,7 @@ namespace Team20ScoutingClient {
 		}
 
 		private void RefreshDataTab() {
-
+			bt.UpdateStatus();
 		}
 
 		private void ReceiveButton_Click(object sender, RoutedEventArgs e) {

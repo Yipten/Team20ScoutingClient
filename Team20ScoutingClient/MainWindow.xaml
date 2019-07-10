@@ -15,13 +15,18 @@
 							<ComboBox x:Name="TeamStatsSelection" SelectionChanged="TeamStatsSelection_SelectionChanged" VerticalContentAlignment="Center" Height="25" Margin="5"/>
 						</StackPanel>
 						<StackPanel Orientation="Horizontal">
-							<StackPanel Orientation="Vertical">
+							<StackPanel Orientation="Vertical" Margin="5">
 								<TextBlock Text="Cross Hab Line %" Foreground="White" FontWeight="Bold" Margin="5"/>
-								<TextBlock x:Name="habLineL1" Foreground="White" Margin="5"/>
+								<TextBlock x:Name="habLineL1TB" Foreground="White" Margin="5"/>
+								<TextBlock x:Name="habLineL2TB" Foreground="White" Margin="5"/>
+							</StackPanel>
+							<StackPanel Orientation="Vertical" Margin="5">
+								<TextBlock Text="Climb %" Foreground="White" FontWeight="Bold" Margin="5"/>
+								<TextBlock x:Name="climbL1TB" Foreground="White" Margin="5"/>
+								<TextBlock x:Name="climbL2TB" Foreground="White" Margin="5"/>
+								<TextBlock x:Name="climbL3TB" Foreground="White" Margin="5"/>
 							</StackPanel>
 						</StackPanel>
-
-						<TextBlock x:Name="testStatTB" Foreground="White"/>
 					</StackPanel>
 				</TabItem>
 				<TabItem Header="Team Trends">
