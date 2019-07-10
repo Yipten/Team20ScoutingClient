@@ -15,12 +15,13 @@ namespace Team20ScoutingClient {
 			this.filePath = filePath;
 			this.statusDisplay = statusDisplay;
 			numReceiving = 0;
+			UpdateStatus();
 		}
 
 		public async void ReceiveFile() {
 			if (BluetoothRadio.IsSupported) {
 				if (numReceiving < 6) {
-					statusDisplay.Text = (++numReceiving).ToString() + " pending transfers";
+					//statusDisplay.Text = (++numReceiving) + " pending transfers";
 					//allow radio to be connected to by other devices
 					BluetoothRadio.PrimaryRadio.Mode = RadioMode.Connectable;
 					//wait for file to be received in a separate thread
@@ -41,13 +42,23 @@ namespace Team20ScoutingClient {
 						listener.Stop();
 						listener.Close();
 					});
-					statusDisplay.Text = (--numReceiving).ToString() + " pending transfers";
+					//statusDisplay.Text = (--numReceiving) + " pending transfers";
 				} else
 					MessageBox.Show("Number of pending transfers is limited to 6", "FYI", MessageBoxButton.OK, MessageBoxImage.Information);
 			} else
-				MessageBox.Show("Bluetooth must be enabled on your device for this function to work", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-			if (numReceiving == 0)
-				statusDisplay.Text = "done";
+				MessageBox.Show("Bluetooth must be enabled on your device in order to transfer files", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			UpdateStatus();
+		}
+
+		public void UpdateStatus() {
+			string str;
+			if (numReceiving > 0)
+				str = numReceiving + " pending transfers";
+			else if (BluetoothRadio.IsSupported)
+				str = "ready";
+			else
+				str = "bluetooth disabled";
+			statusDisplay.Text = str;
 		}
 	}
 }
