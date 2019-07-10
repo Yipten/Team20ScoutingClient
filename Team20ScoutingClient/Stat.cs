@@ -1,34 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Windows.Controls;
 
 namespace Team20ScoutingClient {
 	class Stat {
-		private readonly Func<List<string>> data;
-		private readonly Func<List<double>, double> calc;
+		private readonly TextBlock textBlock;
+
+		private readonly Func<double?> calc;
 
 		private readonly string label;
 		private readonly string unit;
 
-		private double value;
-
-		public Stat(Func<List<string>> data, Func<List<double>, double> calc, string label, string unit) {
-			this.data = data;
-			this.calc = calc;
+		public Stat(ref TextBlock textBlock, string label, string unit, Func<double?> calc) {
+			this.textBlock = textBlock;
 			this.label = label;
 			this.unit = unit;
+			this.calc = calc;
 		}
 
 		public void Calculate() {
-			List<string> dataAsStrings = data();
-			List<double> dataAsDoubles = new List<double>();
-			foreach (string item in dataAsStrings)
-				if (item != "")
-					dataAsDoubles.Add(int.Parse(item));
-			value = calc(dataAsDoubles);
-		}
-
-		public override string ToString() {
-			return label + ": " + value + unit;
+			textBlock.Text = label + ": " + (calc() == null ? "N/A" : calc() + unit);
 		}
 	}
 }
