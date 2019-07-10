@@ -63,6 +63,8 @@ namespace Team20ScoutingClient {
 			//separate string by commas
 			for (int i = 0; i < dataString.Count; i++)
 				Data.Add(dataString[i].Split(',').ToList());
+			foreach (List<string> x in Data)
+				x.Remove("");
 			return true;
 		}
 
@@ -82,7 +84,7 @@ namespace Team20ScoutingClient {
 				} else
 					output[0] = command.ExecuteNonQuery().ToString();
 			} catch (SQLiteException) {
-				MessageBox.Show("The specified database or table does not exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				MessageBox.Show("SQLiteException thrown", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 			}
 			connection.Close();
 			return output;
