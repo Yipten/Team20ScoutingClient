@@ -3,17 +3,36 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Team20ScoutingClient"
-        mc:Ignorable="d"
+		mc:Ignorable="d"
         Icon="Resources\20-SSG-Whiteletter.png"
         Title="Team 20 Scouting Client" MinWidth="400" MinHeight="225" WindowState="Maximized" FontFamily="Lucida Sans" FontSize="12" Background="Black">
 	<Grid>
 		<StackPanel Orientation="Vertical">
 			<TabControl Background="Black" BorderThickness="0">
-				<TabItem Header="Teams">
+				<TabItem Header="Team Stats">
 					<StackPanel Orientation="Vertical" Margin="5">
 						<StackPanel Orientation="Horizontal">
-							<ComboBox x:Name="TeamCB" SelectionChanged="TeamCB_SelectionChanged" VerticalContentAlignment="Center" Height="25" Margin="5"/>
+							<ComboBox x:Name="TeamStatsSelection" SelectionChanged="TeamStatsSelection_SelectionChanged" VerticalContentAlignment="Center" Height="25" Margin="5"/>
+						</StackPanel>
+						<StackPanel Orientation="Horizontal">
+							<StackPanel Orientation="Vertical" Margin="5">
+								<TextBlock Text="Cross Hab Line %" Foreground="White" FontWeight="Bold" Margin="5"/>
+								<TextBlock x:Name="habLineL1TB" Foreground="White" Margin="5"/>
+								<TextBlock x:Name="habLineL2TB" Foreground="White" Margin="5"/>
+							</StackPanel>
+							<StackPanel Orientation="Vertical" Margin="5">
+								<TextBlock Text="Climb %" Foreground="White" FontWeight="Bold" Margin="5"/>
+								<TextBlock x:Name="climbL1TB" Foreground="White" Margin="5"/>
+								<TextBlock x:Name="climbL2TB" Foreground="White" Margin="5"/>
+								<TextBlock x:Name="climbL3TB" Foreground="White" Margin="5"/>
+							</StackPanel>
+						</StackPanel>
+					</StackPanel>
+				</TabItem>
+				<TabItem Header="Team Trends">
+					<StackPanel Orientation="Vertical" Margin="5">
+						<StackPanel Orientation="Horizontal">
+							<ComboBox x:Name="TeamTrendsSelection" SelectionChanged="TeamTrendsSelection_SelectionChanged" VerticalContentAlignment="Center" Height="25" Margin="5"/>
 						</StackPanel>
 						<StackPanel Orientation="Horizontal">
 							<TextBlock x:Name="TeamsTabTitle" Foreground="White" FontSize="24" Margin="5"/>
@@ -27,6 +46,15 @@
 							<Canvas x:Name="teamTeleopPanelCanvas" Width="400" Height="150" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
 						</StackPanel>
 					</StackPanel>
+				</TabItem>
+				<TabItem Header="Match History">
+
+				</TabItem>
+				<TabItem Header="Match Predictions">
+
+				</TabItem>
+				<TabItem Header="Scoring">
+
 				</TabItem>
 				<TabItem Header="Data Management">
 					<StackPanel Orientation="Vertical" Margin="5">
