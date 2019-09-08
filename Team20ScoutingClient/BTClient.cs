@@ -1,5 +1,7 @@
 ﻿using InTheHand.Net;
 using InTheHand.Net.Bluetooth;
+using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,7 +20,7 @@ namespace Team20ScoutingClient {
 			UpdateStatus();
 		}
 
-		public async void ReceiveFile() {       //TODO: research cancellation to be able to cancel pending file transfers
+		public async void ReceiveFile(CancellationToken token) {        //TODO: keep working on this
 			if (BluetoothRadio.IsSupported) {
 				if (numReceiving < 6) {
 					numReceiving++;
@@ -26,23 +28,33 @@ namespace Team20ScoutingClient {
 					//allow radio to be connected to by other devices
 					BluetoothRadio.PrimaryRadio.Mode = RadioMode.Connectable;
 					//wait for file to be received in a separate thread
-					await Task.Run(() => {
-						ObexListener listener = new ObexListener(ObexTransport.Bluetooth);
-						//allow files to be received
-						listener.Start();
+					ObexListener listener = new ObexListener(ObexTransport.Bluetooth);
+					//allow files to be received
+					listener.Start();
+					Task t = new Task(() => {
 						//wait for file to be received
 						ObexListenerContext context = listener.GetContext();
-						//get file information
-						ObexListenerRequest request = context.Request;
-						//keep original file name
-						string[] pathSplits = request.RawUrl.Split('/');
-						string fileName = pathSplits[pathSplits.Length - 1];
-						//save file
-						request.WriteFile(filePath + fileName);
-						//release resources
-						listener.Stop();
-						listener.Close();
+						if (context != null) {
+							//get file information
+							ObexListenerRequest request = context.Request;
+							//keep original file name
+							string[] pathSplits = request.RawUrl.Split('/');
+							string fileName = pathSplits[pathSplits.Length - 1];
+							//save file
+							request.WriteFile(filePath + fileName);
+						}
 					});
+					//start pending transfer
+					t.Start();
+					await Task.Run(() => {
+						try {
+							//waits until transfer is finished or is cancelled
+							t.Wait(token);
+						} catch (OperationCanceledException) { }
+					});
+					//release resources
+					listener.Stop();
+					listener.Close();
 					numReceiving--;
 				} else
 					MessageBox.Show("Number of pending transfers is limited to 6", "FYI", MessageBoxButton.OK, MessageBoxImage.Information);
