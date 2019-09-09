@@ -8,9 +8,10 @@ using System.Windows.Controls;
 
 namespace Team20ScoutingClient {
 	class BTClient {
-		private TextBlock statusDisplay;
+		private readonly TextBlock statusDisplay;
 
-		private string filePath;
+		private readonly string filePath;
+
 		private int numReceiving;
 
 		public BTClient(string filePath, ref TextBlock statusDisplay) {
