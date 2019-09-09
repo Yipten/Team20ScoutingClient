@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -257,8 +258,11 @@ namespace Team20ScoutingClient {
 		#region Data Management
 		private BTClient bt;
 
+		private Stack<CancellationTokenSource> tokenSources;
+
 		private void InitDataTab() {
 			bt = new BTClient("C:/Users/Andrew/Desktop/", ref BTStatus);
+			tokenSources = new Stack<CancellationTokenSource>();
 		}
 
 		private void RefreshDataTab() {
@@ -266,7 +270,27 @@ namespace Team20ScoutingClient {
 		}
 
 		private void ReceiveButton_Click(object sender, RoutedEventArgs e) {
-			bt.ReceiveFile();
+			if (tokenSources.Count < 6) {
+				tokenSources.Push(new CancellationTokenSource());
+				bt.ReceiveFile(tokenSources.Peek().Token);
+			}
+		}
+
+		private void CancelOneButton_Click(object sender, RoutedEventArgs e) {
+			if (tokenSources.Count > 0) {
+				MessageBoxResult result = MessageBox.Show("Would you like to cancel one pending transfer?", "I have a question...", MessageBoxButton.YesNo, MessageBoxImage.Question);
+				if (result == MessageBoxResult.Yes)
+					tokenSources.Pop().Cancel();
+			}
+		}
+
+		private void CancelAllButton_Click(object sender, RoutedEventArgs e) {
+			if (tokenSources.Count > 0) {
+				MessageBoxResult result = MessageBox.Show("Would you like to cancel all pending transfers?", "I have a question...", MessageBoxButton.YesNo, MessageBoxImage.Question);
+				if (result == MessageBoxResult.Yes)
+					for (int i = tokenSources.Count - 1; i >= 0; i--)
+						tokenSources.Pop().Cancel();
+			}
 		}
 		#endregion
 	}
