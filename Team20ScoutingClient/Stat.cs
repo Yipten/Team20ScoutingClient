@@ -1,24 +1,26 @@
 ﻿using System;
-using System.Windows.Controls;
 
 namespace Team20ScoutingClient {
 	class Stat {
-		private readonly TextBlock textBlock;
+		public double? Value { get; set; } = null;
+		public string Query { get; set; } = "";
 
-		private readonly Func<double?> calc;
+		private string suffix;
 
-		private readonly string label;
-		private readonly string unit;
-
-		public Stat(ref TextBlock textBlock, string label, string unit, Func<double?> calc) {
-			this.textBlock = textBlock;
-			this.label = label;
-			this.unit = unit;
-			this.calc = calc;
+		public Stat(string suffix) {
+			this.suffix = suffix;
 		}
 
-		public void Calculate() {
-			textBlock.Text = label + ": " + (calc() == null ? "N/A" : calc() + unit);
+		public void Update() {
+			try {
+				Value = Math.Round(DBClient.ExecuteQuery(Query, true)[0], 2);
+			} catch (ArgumentOutOfRangeException) {
+				Value = null;
+			}
+		}
+
+		public override string ToString() {
+			return Value.HasValue ? Value + suffix : "null";
 		}
 	}
 }
