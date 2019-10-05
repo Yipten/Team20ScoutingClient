@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
@@ -32,19 +33,121 @@ namespace Team20ScoutingClient {
 			connection = new SQLiteConnection("Data Source=" + filePath + "; Version=3");
 		}
 
+		/// <summary>
+		/// Merges data from tablets into database on computer.
+		/// </summary>
+		/// <param name="path">File path where databases from tablets are stored.</param>
+		/// <param name="databases">Array of database file names to merge from.</param>
 		public static void Merge(string path, params string[] databases) {
 			int dbNum = 0;
 			foreach (string db in databases) {
+				string pathTemp = path + db + ".sqlite";
+				// skip file if it doesn't exist
+				if (!File.Exists(pathTemp))
+					continue;
+				// query to merge data into database on computer
 				ExecuteQuery(
-					"ATTACH DATABASE '" + path + db + ".sqlite' AS db" + dbNum + ";" +
-					"INSERT IGNORE INTO RawData SELECT * FROM db" + dbNum + ".RawData;" +
+					"ATTACH DATABASE '" + pathTemp + "' AS db" + dbNum + ";" +
+					"INSERT INTO RawData(" +
+						"ScoutName, " +
+						"MatchNumber," +
+						"ReplayMatch, " +
+						"TeamNumber, " +
+						"AllianceColor, " +
+						"StartPosition, " +
+						"PreloadedItem, " +
+						"CrossHabLine, " +
+						"SandCargoShip, " +
+						"SandCargoRocket1, " +
+						"SandCargoRocket2, " +
+						"SandCargoRocket3, " +
+						"SandCargoDrop, " +
+						"SandPanelShip, " +
+						"SandPanelRocket1, " +
+						"SandPanelRocket2, " +
+						"SandPanelRocket3, " +
+						"SandPanelDrop, " +
+						"TeleCargoShip, " +
+						"TeleCargoRocket1, " +
+						"TeleCargoRocket2, " +
+						"TeleCargoRocket3, " +
+						"TeleCargoDrop, " +
+						"TelePanelShip, " +
+						"TelePanelRocket1, " +
+						"TelePanelRocket2, " +
+						"TelePanelRocket3, " +
+						"TelePanelDrop, " +
+						"HabLevelAchieved, " +
+						"HabLevelAttempted, " +
+						"HadAssistance, " +
+						"AssistedOthers, " +
+						"DefenseAmount, " +
+						"DefenseSkill, " +
+						"DefendedAmount, " +
+						"DefendedSkill, " +
+						"Fouls, " +
+						"Breakdown, " +
+						"Comments" +
+					") " +
+					"SELECT " +
+						"ScoutName, " +
+						"MatchNumber," +
+						"ReplayMatch, " +
+						"TeamNumber, " +
+						"AllianceColor, " +
+						"StartPosition, " +
+						"PreloadedItem, " +
+						"CrossHabLine, " +
+						"SandCargoShip, " +
+						"SandCargoRocket1, " +
+						"SandCargoRocket2, " +
+						"SandCargoRocket3, " +
+						"SandCargoDrop, " +
+						"SandPanelShip, " +
+						"SandPanelRocket1, " +
+						"SandPanelRocket2, " +
+						"SandPanelRocket3, " +
+						"SandPanelDrop, " +
+						"TeleCargoShip, " +
+						"TeleCargoRocket1, " +
+						"TeleCargoRocket2, " +
+						"TeleCargoRocket3, " +
+						"TeleCargoDrop, " +
+						"TelePanelShip, " +
+						"TelePanelRocket1, " +
+						"TelePanelRocket2, " +
+						"TelePanelRocket3, " +
+						"TelePanelDrop, " +
+						"HabLevelAchieved, " +
+						"HabLevelAttempted, " +
+						"HadAssistance, " +
+						"AssistedOthers, " +
+						"DefenseAmount, " +
+						"DefenseSkill, " +
+						"DefendedAmount, " +
+						"DefendedSkill, " +
+						"Fouls, " +
+						"Breakdown, " +
+						"Comments" +
+					" " +
+					"FROM db" + dbNum + ".RawData;" +
 					"DETACH DATABASE db" + dbNum + ";",
 					false
 				);
+				// delete database file after it has been merged from
+				bool isDeleted = false;
+				while (!isDeleted)
+					try {
+						File.Delete(pathTemp);
+						isDeleted = true;
+					} catch (IOException) {
+						MessageBox.Show("The file at \"" + pathTemp + "\" is currently open in another program. Please close it and try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+					}
 				dbNum++;
 			}
 		}
 
+		[Obsolete("This method does nothing and will be removed in the future")]
 		public static bool GetData(string table, string[] columns, string filter = null, string filterValue = null, string orderBy = null) {
 			////if the file path was not specified...
 			//if (filePath == "") {
@@ -114,6 +217,12 @@ namespace Team20ScoutingClient {
 		//	return output;
 		//}
 
+		/// <summary>
+		/// Executes a query on the connected SQLite database.
+		/// </summary>
+		/// <param name="query">Query to execute.</param>
+		/// <param name="read">True if results are desired. False if not.</param>
+		/// <returns></returns>
 		public static List<double> ExecuteQuery(string query, bool read) {
 			connection.Open();
 			SQLiteCommand command = new SQLiteCommand(query, connection);
