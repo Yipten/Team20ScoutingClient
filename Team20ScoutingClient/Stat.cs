@@ -5,9 +5,11 @@ namespace Team20ScoutingClient {
 		public double? Value { get; set; } = null;
 		public string Query { get; set; } = "";
 
+		private string label;
 		private string suffix;
 
-		public Stat(string suffix) {
+		public Stat(string label, string suffix) {
+			this.label = label;
 			this.suffix = suffix;
 		}
 
@@ -27,7 +29,7 @@ namespace Team20ScoutingClient {
 		/// </summary>
 		/// <returns>Stat.Value as a string.</returns>
 		public override string ToString() {
-			return Value.HasValue ? Value + suffix : "null";
+			return label + ": " + (Value.HasValue ? Value + suffix : "null");
 		}
 	}
 }

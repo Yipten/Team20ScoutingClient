@@ -55,11 +55,11 @@ namespace Team20ScoutingClient {
 			maxPointsStat;
 
 		private void InitTeamStatsTab() {
-			habLineL1Stat = new Stat("%");
-			habLineL2Stat = new Stat("%");
-			climbL1Stat = new Stat("%");
-			climbL2Stat = new Stat("%");
-			climbL3Stat = new Stat("%");
+			habLineL1Stat = new Stat("L1", "%");
+			habLineL2Stat = new Stat("L2", "%");
+			climbL1Stat = new Stat("L1", "%");
+			climbL2Stat = new Stat("L2", "%");
+			climbL3Stat = new Stat("L3", "%");
 			stats = new Stat[] { habLineL1Stat, habLineL2Stat, climbL1Stat, climbL2Stat, climbL3Stat };
 			TeamStatsSelection.Items.Clear();
 			List<double> teams = DBClient.ExecuteQuery(
