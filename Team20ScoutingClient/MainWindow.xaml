@@ -6,25 +6,48 @@
 		mc:Ignorable="d"
         Icon="Resources\20-SSG-Whiteletter.png"
         Title="Team 20 Scouting Client" MinWidth="400" MinHeight="225" WindowState="Maximized" FontFamily="Lucida Sans" FontSize="12" Background="Black">
+	<Window.Resources>
+		<Style TargetType="TabControl">
+			<Setter Property="Background" Value="Black"/>
+			<Setter Property="BorderThickness" Value="0"/>
+		</Style>
+		<Style TargetType="TextBlock">
+			<Setter Property="FontSize" Value="12"/>
+			<Setter Property="FontFamily" Value="Lucida Sans"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="Margin" Value="5"/>
+		</Style>
+		<Style TargetType="Button">
+			<Setter Property="Height" Value="25"/>
+			<Setter Property="Width" Value="75"/>
+			<Setter Property="HorizontalAlignment" Value="Left"/>
+			<Setter Property="Margin" Value="5"/>
+		</Style>
+		<Style TargetType="ComboBox">
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="Height" Value="25"/>
+			<Setter Property="Margin" Value="5"/>
+		</Style>
+	</Window.Resources>
 	<Grid>
 		<StackPanel Orientation="Vertical">
-			<TabControl Background="Black" BorderThickness="0">
+			<TabControl>
 				<TabItem Header="Team Stats">
 					<StackPanel Orientation="Vertical" Margin="5">
 						<StackPanel Orientation="Horizontal">
-							<ComboBox x:Name="TeamStatsSelection" SelectionChanged="TeamStatsSelection_SelectionChanged" VerticalContentAlignment="Center" Height="25" Margin="5"/>
+							<ComboBox x:Name="TeamStatsSelection" SelectionChanged="TeamStatsSelection_SelectionChanged"/>
 						</StackPanel>
 						<StackPanel Orientation="Horizontal">
 							<StackPanel Orientation="Vertical" Margin="5">
-								<TextBlock Text="Cross Hab Line %" Foreground="White" FontWeight="Bold" Margin="5"/>
-								<TextBlock x:Name="habLineL1TB" Foreground="White" Margin="5"/>
-								<TextBlock x:Name="habLineL2TB" Foreground="White" Margin="5"/>
+								<TextBlock Text="Cross Hab Line %" FontWeight="Bold"/>
+								<TextBlock x:Name="habLineL1TB"/>
+								<TextBlock x:Name="habLineL2TB"/>
 							</StackPanel>
 							<StackPanel Orientation="Vertical" Margin="5">
-								<TextBlock Text="Climb %" Foreground="White" FontWeight="Bold" Margin="5"/>
-								<TextBlock x:Name="climbL1TB" Foreground="White" Margin="5"/>
-								<TextBlock x:Name="climbL2TB" Foreground="White" Margin="5"/>
-								<TextBlock x:Name="climbL3TB" Foreground="White" Margin="5"/>
+								<TextBlock Text="Climb %" FontWeight="Bold"/>
+								<TextBlock x:Name="climbL1TB"/>
+								<TextBlock x:Name="climbL2TB"/>
+								<TextBlock x:Name="climbL3TB"/>
 							</StackPanel>
 						</StackPanel>
 					</StackPanel>
@@ -32,7 +55,7 @@
 				<TabItem Header="Team Trends">
 					<StackPanel Orientation="Vertical" Margin="5">
 						<StackPanel Orientation="Horizontal">
-							<ComboBox x:Name="TeamTrendsSelection" SelectionChanged="TeamTrendsSelection_SelectionChanged" VerticalContentAlignment="Center" Height="25" Margin="5"/>
+							<ComboBox x:Name="TeamTrendsSelection" SelectionChanged="TeamTrendsSelection_SelectionChanged"/>
 						</StackPanel>
 						<StackPanel Orientation="Horizontal">
 							<TextBlock x:Name="TeamsTabTitle" Foreground="White" FontSize="24" Margin="5"/>
@@ -61,20 +84,20 @@
 						<TextBlock Text="Data Management" Foreground="White" FontSize="24" Margin="5"/>
 						<TextBlock Text="Bluetooth" Foreground="White" FontSize="20" Margin="5"/>
 						<StackPanel Orientation="Horizontal">
-							<Button x:Name="ReceiveButton" Content="Receive File" Click="ReceiveButton_Click" Width="85" Height="25" Margin="5"/>
-							<Button x:Name="CancelOneButton" Content="Cancel One" Click="CancelOneButton_Click" Width="75" Height="25" Margin="5"/>
-							<Button x:Name="CancelAllButton" Content="Cancel All" Click="CancelAllButton_Click" Width="75" Height="25" Margin="5"/>
+							<Button x:Name="ReceiveButton" Content="Receive File" Click="ReceiveButton_Click"/>
+							<Button x:Name="CancelOneButton" Content="Cancel One" Click="CancelOneButton_Click"/>
+							<Button x:Name="CancelAllButton" Content="Cancel All" Click="CancelAllButton_Click"/>
 						</StackPanel>
 						<StackPanel Orientation="Horizontal">
 							<TextBlock Text="Status: " Foreground="White" FontSize="14" Margin="5"/>
 							<TextBlock x:Name="BTStatus" Foreground="White" FontSize="14" Margin="5"/>
 						</StackPanel>
 						<TextBlock Text="SQLite Databases" Foreground="White" FontSize="20" Margin="5"/>
-						<Button x:Name="MergeButton" Content="Merge" Click="MergeButton_Click" HorizontalAlignment="Left" Width="75" Height="25" Margin="5"/>
+						<Button x:Name="MergeButton" Content="Merge" Click="MergeButton_Click"/>
 					</StackPanel>
 				</TabItem>
 			</TabControl>
-			<Button x:Name="RefreshButton" Content="Refresh" Click="RefreshButton_Click" Width="75" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
+			<Button x:Name="RefreshButton" Content="Refresh" Click="RefreshButton_Click"/>
 		</StackPanel>
 	</Grid>
 </Window>
