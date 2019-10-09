@@ -21,7 +21,7 @@ namespace Team20ScoutingClient {
 			UpdateStatus();
 		}
 
-		public async void ReceiveFile(CancellationToken token) {        //TODO: keep working on this
+		public async void ReceiveFile(CancellationToken token) {
 			if (BluetoothRadio.IsSupported) {
 				if (numReceiving < 6) {
 					numReceiving++;

@@ -8,7 +8,7 @@ namespace Team20ScoutingClient {
 		private string label;
 		private string suffix;
 
-		public Stat(string label, string suffix) {
+		public Stat(string label, string suffix = "") {
 			this.label = label;
 			this.suffix = suffix;
 		}

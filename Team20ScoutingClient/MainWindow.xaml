@@ -5,15 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		mc:Ignorable="d"
         Icon="Resources\20-SSG-Whiteletter.png"
-        Title="Team 20 Scouting Client" MinWidth="400" MinHeight="225" WindowState="Maximized" FontFamily="Lucida Sans" FontSize="12" Background="Black">
+        Title="Team 20 Scouting Client" Height="650" Width="650" MinHeight="650" MinWidth="650" WindowState="Maximized" ResizeMode="CanResize" FontFamily="Lucida Sans" FontSize="12" Background="Black">
+	<!--TODO: organize items to optimize space on screen-->
 	<Window.Resources>
 		<Style TargetType="TabControl">
 			<Setter Property="Background" Value="Black"/>
 			<Setter Property="BorderThickness" Value="0"/>
 		</Style>
 		<Style TargetType="TextBlock">
-			<Setter Property="FontSize" Value="12"/>
-			<Setter Property="FontFamily" Value="Lucida Sans"/>
 			<Setter Property="Foreground" Value="White"/>
 			<Setter Property="Margin" Value="5"/>
 		</Style>
@@ -48,6 +47,32 @@
 								<TextBlock x:Name="climbL1TB"/>
 								<TextBlock x:Name="climbL2TB"/>
 								<TextBlock x:Name="climbL3TB"/>
+							</StackPanel>
+						</StackPanel>
+						<StackPanel Orientation="Horizontal">
+							<StackPanel Orientation="Vertical" Margin="5">
+								<TextBlock Text="Averages Per Match" FontWeight="Bold"/>
+								<TextBlock x:Name="cargoTotalTB"/>
+								<TextBlock x:Name="cargoL1TB"/>
+								<TextBlock x:Name="cargoL2TB"/>
+								<TextBlock x:Name="cargoL3TB"/>
+								<TextBlock x:Name="cargoDropTB"/>
+								<TextBlock x:Name="panelTotalTB"/>
+								<TextBlock x:Name="panelL1TB"/>
+								<TextBlock x:Name="panelL2TB"/>
+								<TextBlock x:Name="panelL3TB"/>
+								<TextBlock x:Name="panelDropTB"/>
+								<TextBlock x:Name="climbPointsTB"/>
+								<TextBlock x:Name="pointsTB"/>
+								<TextBlock x:Name="foulsTB"/>
+								<TextBlock x:Name="defenseTB"/>
+								<TextBlock x:Name="breakdownsTB"/>
+							</StackPanel>
+							<StackPanel Orientation="Vertical" Margin="5">
+								<TextBlock Text="Maximums" FontWeight="Bold"/>
+								<TextBlock x:Name="maxCargoTB"/>
+								<TextBlock x:Name="maxPanelTB"/>
+								<TextBlock x:Name="maxPointsTB"/>
 							</StackPanel>
 						</StackPanel>
 					</StackPanel>
