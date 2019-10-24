@@ -61,6 +61,7 @@
     <Reference Include="System.Data.SQLite.Linq, Version=1.0.111.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.111.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -80,10 +81,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Stat.cs" />
-    <Page Include="DetailWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -95,9 +92,6 @@
     <Compile Include="BoxPlot.cs" />
     <Compile Include="BTClient.cs" />
     <Compile Include="DBClient.cs" />
-    <Compile Include="DetailWindow.xaml.cs">
-      <DependentUpon>DetailWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="LineGraph.cs" />
     <Compile Include="LinePlot.cs" />
     <Compile Include="MainWindow.xaml.cs">

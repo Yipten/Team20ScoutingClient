@@ -239,6 +239,8 @@ namespace Team20ScoutingClient {
 					dataCSV = command.ExecuteNonQuery().ToString();
 			} catch (SQLiteException e) {
 				MessageBox.Show("SQLiteException thrown\n\n" + e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			} finally {
+				command.Dispose();
 			}
 			connection.Close();
 			//string form of data

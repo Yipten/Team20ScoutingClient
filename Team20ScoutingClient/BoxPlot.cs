@@ -129,15 +129,6 @@ namespace Team20ScoutingClient {
             minLine.StrokeThickness = lowerLine.StrokeThickness = upperLine.StrokeThickness = maxLine.StrokeThickness = lowerBox.StrokeThickness = upperBox.StrokeThickness = 2;
             minLine.Stroke = lowerLine.Stroke = upperLine.Stroke = maxLine.Stroke = lowerBox.Stroke = upperBox.Stroke = Brushes.White;
             lowerBox.Fill = upperBox.Fill = Brushes.Gray;
-
-            CANVAS.MouseDown += MouseDown;
-        }
-
-        private void MouseDown(object sender, MouseButtonEventArgs e) {
-            if (e.ClickCount == 2) {
-                DetailWindow detailWindow = new DetailWindow(ToString()) { Owner = Application.Current.MainWindow };
-                detailWindow.Show();
-            }
         }
 
         public void Draw() {

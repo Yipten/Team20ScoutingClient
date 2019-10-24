@@ -7,13 +7,18 @@ using System.Windows;
 using System.Windows.Controls;
 
 namespace Team20ScoutingClient {
-	class BTClient {
+	class BTClient {	//TODO: move CancellationToken stuff to here
 		private readonly TextBlock statusDisplay;
 
 		private readonly string filePath;
 
 		private int numReceiving;
 
+		/// <summary>
+		/// Initializes an instance of the BTClient class.
+		/// </summary>
+		/// <param name="filePath">File path to save recieved files to.</param>
+		/// <param name="statusDisplay">TextBlock to display bluetooth status in.</param>
 		public BTClient(string filePath, ref TextBlock statusDisplay) {
 			this.filePath = filePath;
 			this.statusDisplay = statusDisplay;
@@ -21,6 +26,10 @@ namespace Team20ScoutingClient {
 			UpdateStatus();
 		}
 
+		/// <summary>
+		/// Recieves one file via bluetooth.
+		/// </summary>
+		/// <param name="token">CancellationToken to cancel transfer.</param>
 		public async void ReceiveFile(CancellationToken token) {
 			if (BluetoothRadio.IsSupported) {
 				if (numReceiving < 6) {
@@ -64,6 +73,9 @@ namespace Team20ScoutingClient {
 			UpdateStatus();
 		}
 
+		/// <summary>
+		/// Updates status display TextBlock.
+		/// </summary>
 		public void UpdateStatus() {
 			string str;
 			if (numReceiving > 0)
