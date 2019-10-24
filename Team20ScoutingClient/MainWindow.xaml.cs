@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Team20ScoutingClient {
 	public partial class MainWindow : Window {
@@ -15,13 +16,13 @@ namespace Team20ScoutingClient {
 
 		private void InitTabs() {
 			InitTeamStatsTab();
-			//InitTeamTrendsTab();
+			InitTeamTrendsTab();
 			InitDataTab();
 		}
 
 		private void RefreshTabs() {
 			RefreshTeamStatsTab();
-			//RefreshTeamTrendsTab();
+			RefreshTeamTrendsTab();
 			RefreshDataTab();
 		}
 
@@ -280,29 +281,29 @@ namespace Team20ScoutingClient {
 			foreach (Stat s in stats)
 				s.Update();
 			// display stat values in UI
-			habLineL1TB.Text = habLineL1Stat.ToString();
-			habLineL2TB.Text = habLineL2Stat.ToString();
-			climbL1TB.Text = climbL1Stat.ToString();
-			climbL2TB.Text = climbL2Stat.ToString();
-			climbL3TB.Text = climbL3Stat.ToString();
-			cargoTotalTB.Text = cargoTotalStat.ToString();
-			cargoL1TB.Text = cargoL1Stat.ToString();
-			cargoL2TB.Text = cargoL2Stat.ToString();
-			cargoL3TB.Text = cargoL3Stat.ToString();
-			cargoDropTB.Text = cargoDropStat.ToString();
-			panelTotalTB.Text = panelTotalStat.ToString();
-			panelL1TB.Text = panelL1Stat.ToString();
-			panelL2TB.Text = panelL2Stat.ToString();
-			panelL3TB.Text = panelL3Stat.ToString();
-			panelDropTB.Text = panelDropStat.ToString();
-			climbPointsTB.Text = climbPointsStat.ToString();
-			pointsTB.Text = pointsStat.ToString();
-			foulsTB.Text = foulsStat.ToString();
-			defenseTB.Text = defenseStat.ToString();
-			breakdownsTB.Text = breakdownsStat.ToString();
-			maxCargoTB.Text = maxCargoStat.ToString();
-			maxPanelTB.Text = maxPanelStat.ToString();
-			maxPointsTB.Text = maxPointsStat.ToString();
+			HabLineL1TB.Text = habLineL1Stat.ToString();
+			HabLineL2TB.Text = habLineL2Stat.ToString();
+			ClimbL1TB.Text = climbL1Stat.ToString();
+			ClimbL2TB.Text = climbL2Stat.ToString();
+			ClimbL3TB.Text = climbL3Stat.ToString();
+			CargoTotalTB.Text = cargoTotalStat.ToString();
+			CargoL1TB.Text = cargoL1Stat.ToString();
+			CargoL2TB.Text = cargoL2Stat.ToString();
+			CargoL3TB.Text = cargoL3Stat.ToString();
+			CargoDropTB.Text = cargoDropStat.ToString();
+			PanelTotalTB.Text = panelTotalStat.ToString();
+			PanelL1TB.Text = panelL1Stat.ToString();
+			PanelL2TB.Text = panelL2Stat.ToString();
+			PanelL3TB.Text = panelL3Stat.ToString();
+			PanelDropTB.Text = panelDropStat.ToString();
+			PlimbPointsTB.Text = climbPointsStat.ToString();
+			PointsTB.Text = pointsStat.ToString();
+			FoulsTB.Text = foulsStat.ToString();
+			DefenseTB.Text = defenseStat.ToString();
+			BreakdownsTB.Text = breakdownsStat.ToString();
+			MaxCargoTB.Text = maxCargoStat.ToString();
+			MaxPanelTB.Text = maxPanelStat.ToString();
+			MaxPointsTB.Text = maxPointsStat.ToString();
 		}
 
 		private void TeamStatsSelection_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -319,61 +320,103 @@ namespace Team20ScoutingClient {
 		#endregion
 
 		#region Team Trends
-		private LineGraph[] teamLineGraphs;
+		private LineGraph[] lineGraphs;
 		private LineGraph
-			teamSandstormCargo,
-			teamSandstormPanel,
-			teamTeleopCargo,
-			teamTeleopPanel;
+			gamePiecesGraph,
+			pointsGraph;
+		private LinePlot
+			sandCargePlot,
+			sandPanelPlot,
+			teleCargoPlot,
+			telePanelPlot,
+			habLevelPlot,
+			pointsPlot;
 
 		private void InitTeamTrendsTab() {
-			teamSandstormCargo = new LineGraph(ref teamSandstormCargoCanvas, 0, 10, "Cargo in Sandstorm");
-			teamSandstormPanel = new LineGraph(ref teamSandstormPanelCanvas, 0, 10, "Hatch Panels in Sandstorm");
-			teamTeleopCargo = new LineGraph(ref teamTeleopCargoCanvas, 0, 10, "Cargo in Teleop");
-			teamTeleopPanel = new LineGraph(ref teamTeleopPanelCanvas, 0, 10, "Hatch Panels in Teleop");
-			teamLineGraphs = new LineGraph[] { teamSandstormCargo, teamSandstormPanel, teamTeleopCargo, teamTeleopPanel };
-			if (DBClient.GetData("teams", new string[] { "number", "name" }, orderBy: "number")) {
-				TeamTrendsSelection.Items.Clear();
-				foreach (string item in DBClient.Data[0])
-					TeamTrendsSelection.Items.Add(item);
-				TeamTrendsSelection.SelectedItem = TeamTrendsSelection.Items[0];
-			}
+			// initialize graphs
+			gamePiecesGraph = new LineGraph("Game Pieces", GamePiecesGraphCanvas);
+			sandCargePlot = new LinePlot(Brushes.Orange, true, GamePiecesGraphCanvas);
+			sandPanelPlot = new LinePlot(Brushes.Yellow, true, GamePiecesGraphCanvas);
+			teleCargoPlot = new LinePlot(Brushes.Orange, false, GamePiecesGraphCanvas);
+			telePanelPlot = new LinePlot(Brushes.Yellow, false, GamePiecesGraphCanvas);
+			habLevelPlot = new LinePlot(Brushes.Red, false, GamePiecesGraphCanvas);
+			gamePiecesGraph.LinePlots.Add(sandCargePlot);
+			gamePiecesGraph.LinePlots.Add(sandPanelPlot);
+			gamePiecesGraph.LinePlots.Add(teleCargoPlot);
+			gamePiecesGraph.LinePlots.Add(telePanelPlot);
+			gamePiecesGraph.LinePlots.Add(habLevelPlot);
+			GamePiecesGraphCanvas.Children.Add(gamePiecesGraph.Canvas);
+			pointsGraph = new LineGraph("Points", PointsGraphCanvas);
+			pointsPlot = new LinePlot(Brushes.Red, false, PointsGraphCanvas);
+			pointsGraph.LinePlots.Add(pointsPlot);
+			PointsGraphCanvas.Children.Add(pointsGraph.Canvas);
+			lineGraphs = new LineGraph[] { gamePiecesGraph, pointsGraph };
+			// clear items just in case
+			TeamTrendsSelection.Items.Clear();
+			// get distinct team numbers in database
+			List<double> teams = DBClient.ExecuteQuery(
+				"SELECT DISTINCT TeamNumber " +
+				"FROM RawData " +
+				"ORDER BY TeamNumber ASC;",
+				true
+			);
+			// add teams to combobox
+			foreach (double team in teams)
+				TeamTrendsSelection.Items.Add(team.ToString());
+			TeamTrendsSelection.SelectedItem = TeamStatsSelection.Items[0];
 		}
 
 		private void RefreshTeamTrendsTab() {
-			if (DBClient.GetData("teams", new string[] { "number", "name" }, filter: "number", filterValue: TeamTrendsSelection.SelectedItem.ToString(), orderBy: "number"))
-				TeamsTabTitle.Text = DBClient.Data[0][0] + " - " + DBClient.Data[1][0];
-			foreach (LineGraph lineGraph in teamLineGraphs)
-				lineGraph.LinePlots.Clear();
-			//if (DBClient.GetData("sandstorm", new string[] { "cargoCollect", "cargoDeliverShip", "cargoDeliverRocket", "cargoDrop" }, filter: "team", filterValue: TeamTrendsSelection.SelectedItem.ToString(), orderBy: "match")) {
-			//	teamSandstormCargo.LinePlots.Add(new LinePlot(DBClient.Data[0], Brushes.Yellow, false));
-			//	teamSandstormCargo.LinePlots.Add(new LinePlot(DBClient.Data[1], Brushes.Green, true));
-			//	teamSandstormCargo.LinePlots.Add(new LinePlot(DBClient.Data[2], Brushes.Green, false));
-			//	teamSandstormCargo.LinePlots.Add(new LinePlot(DBClient.Data[3], Brushes.Red, false));
-			//}
-			//if (DBClient.GetData("sandstorm", new string[] { "panelCollectStation", "panelCollectFloor", "panelDeliverShip", "panelDeliverRocket", "panelDrop" }, filter: "team", filterValue: TeamTrendsSelection.SelectedItem.ToString(), orderBy: "match")) {
-			//	teamSandstormPanel.LinePlots.Add(new LinePlot(DBClient.Data[0], Brushes.Yellow, false));
-			//	teamSandstormPanel.LinePlots.Add(new LinePlot(DBClient.Data[1], Brushes.Yellow, true));
-			//	teamSandstormPanel.LinePlots.Add(new LinePlot(DBClient.Data[2], Brushes.Green, true));
-			//	teamSandstormPanel.LinePlots.Add(new LinePlot(DBClient.Data[3], Brushes.Green, false));
-			//	teamSandstormPanel.LinePlots.Add(new LinePlot(DBClient.Data[4], Brushes.Red, false));
-			//}
-			//if (DBClient.GetData("teleop", new string[] { "cargoCollectStation", "cargoCollectFloor", "cargoDeliverShip", "cargoDeliverRocket", "cargoDrop" }, filter: "team", filterValue: TeamTrendsSelection.SelectedItem.ToString(), orderBy: "match")) {
-			//	teamTeleopCargo.LinePlots.Add(new LinePlot(DBClient.Data[0], Brushes.Yellow, false));
-			//	teamTeleopCargo.LinePlots.Add(new LinePlot(DBClient.Data[1], Brushes.Yellow, true));
-			//	teamTeleopCargo.LinePlots.Add(new LinePlot(DBClient.Data[2], Brushes.Green, true));
-			//	teamTeleopCargo.LinePlots.Add(new LinePlot(DBClient.Data[3], Brushes.Green, false));
-			//	teamTeleopCargo.LinePlots.Add(new LinePlot(DBClient.Data[4], Brushes.Red, false));
-			//}
-			//if (DBClient.GetData("teleop", new string[] { "panelCollectStation", "panelCollectFloor", "panelDeliverShip", "panelDeliverRocket", "panelDrop" }, filter: "team", filterValue: TeamTrendsSelection.SelectedItem.ToString(), orderBy: "match")) {
-			//	teamTeleopPanel.LinePlots.Add(new LinePlot(DBClient.Data[0], Brushes.Yellow, false));
-			//	teamTeleopPanel.LinePlots.Add(new LinePlot(DBClient.Data[1], Brushes.Yellow, true));
-			//	teamTeleopPanel.LinePlots.Add(new LinePlot(DBClient.Data[2], Brushes.Green, true));
-			//	teamTeleopPanel.LinePlots.Add(new LinePlot(DBClient.Data[3], Brushes.Green, false));
-			//	teamTeleopPanel.LinePlots.Add(new LinePlot(DBClient.Data[4], Brushes.Red, false));
-			//}
-			//foreach (LineGraph lineGraph in teamLineGraphs)
-			//	lineGraph.Draw();
+			sandCargePlot.Query =
+				"SELECT SandCargoShip + SandCargoRocket1 + SandCargoRocket2 + SandCargoRocket3 " +
+				"FROM RawData " +
+				"WHERE TeamNumber = " + TeamTrendsSelection.SelectedItem.ToString() + " " +
+				"ORDER BY MatchNumber;";
+			sandPanelPlot.Query =
+				"SELECT SandPanelShip + SandPanelRocket1 + SandPanelRocket2 + SandPanelRocket3 " +
+				"FROM RawData " +
+				"WHERE TeamNumber = " + TeamTrendsSelection.SelectedItem.ToString() + " " +
+				"ORDER BY MatchNumber;";
+			teleCargoPlot.Query =
+				"SELECT TeleCargoShip + TeleCargoRocket1 + TeleCargoRocket2 + TeleCargoRocket3 " +
+				"FROM RawData " +
+				"WHERE TeamNumber = " + TeamTrendsSelection.SelectedItem.ToString() + " " +
+				"ORDER BY MatchNumber;";
+			telePanelPlot.Query = 
+				"SELECT TelePanelShip + TelePanelRocket1 + TelePanelRocket2 + TelePanelRocket3 " +
+				"FROM RawData " +
+				"WHERE TeamNumber = " + TeamTrendsSelection.SelectedItem.ToString() + " " +
+				"ORDER BY MatchNumber;";
+			habLevelPlot.Query =
+				"SELECT HabLevelAchieved " +
+				"FROM RawData " +
+				"WHERE TeamNumber = " + TeamTrendsSelection.SelectedItem.ToString() + " " +
+				"ORDER BY MatchNumber;";
+			pointsPlot.Query =
+				"SELECT " +
+					"CASE " +
+						"WHEN CrossHabLine = 1 THEN " +
+							"CASE " +
+								"WHEN StartPosition BETWEEN 3 AND 5 THEN 3 " +
+								"WHEN StartPosition BETWEEN 1 AND 2 THEN 6 " +
+							"END " +
+						"ELSE 0 " +
+					"END + " +
+					"(SandPanelRocket1 + SandPanelRocket2 + SandPanelRocket3 + SandPanelShip + TelePanelRocket1 + TelePanelRocket2 + TelePanelRocket3 + TelePanelShip) * 2 + " +
+					"(SandCargoRocket1 + SandCargoRocket2 + SandCargoRocket3 + SandCargoShip + TeleCargoRocket1 + TeleCargoRocket2 + TeleCargoRocket3 + TeleCargoShip) * 3 + " +
+					"CASE " +
+						"WHEN HabLevelAchieved = 0 THEN 0 " +
+						"WHEN HabLevelAchieved = 1 THEN 3 " +
+						"WHEN HabLevelAchieved = 2 THEN 6 " +
+						"WHEN HabLevelAchieved = 3 THEN 12 " +
+					"END " +
+				"FROM RawData " +
+				"WHERE TeamNumber = " + TeamTrendsSelection.SelectedItem.ToString() + " " +
+				"ORDER BY MatchNumber;";
+			//GamePiecesGraphCanvas.Children.Clear();
+			foreach (LineGraph lineGraph in lineGraphs)
+				lineGraph.Update();
+			//GamePiecesGraphCanvas.Children.Add(gamePiecesGraph.Canvas);
 		}
 
 		private void TeamTrendsSelection_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -396,7 +439,7 @@ namespace Team20ScoutingClient {
 		#region Data Management
 		private BTClient bt;
 
-		private Stack<CancellationTokenSource> tokenSources;
+		private Stack<CancellationTokenSource> tokenSources;        //TODO: move CancellationToken stuff to BTClient class
 
 		private void InitDataTab() {
 			bt = new BTClient("C:/Users/Andrew/Desktop/", ref BTStatus);
@@ -407,7 +450,7 @@ namespace Team20ScoutingClient {
 			bt.UpdateStatus();
 		}
 
-		private void ReceiveButton_Click(object sender, RoutedEventArgs e) {	//TODO: only perform action if bluetooth is enabled
+		private void ReceiveButton_Click(object sender, RoutedEventArgs e) {    //TODO: only perform action if bluetooth is enabled
 			if (tokenSources.Count < 6) {
 				tokenSources.Push(new CancellationTokenSource());
 				bt.ReceiveFile(tokenSources.Peek().Token);

@@ -39,60 +39,51 @@
 						<StackPanel Orientation="Horizontal">
 							<StackPanel Orientation="Vertical" Margin="5">
 								<TextBlock Text="Cross Hab Line %" FontWeight="Bold"/>
-								<TextBlock x:Name="habLineL1TB"/>
-								<TextBlock x:Name="habLineL2TB"/>
+								<TextBlock x:Name="HabLineL1TB"/>
+								<TextBlock x:Name="HabLineL2TB"/>
 							</StackPanel>
 							<StackPanel Orientation="Vertical" Margin="5">
 								<TextBlock Text="Climb %" FontWeight="Bold"/>
-								<TextBlock x:Name="climbL1TB"/>
-								<TextBlock x:Name="climbL2TB"/>
-								<TextBlock x:Name="climbL3TB"/>
+								<TextBlock x:Name="ClimbL1TB"/>
+								<TextBlock x:Name="ClimbL2TB"/>
+								<TextBlock x:Name="ClimbL3TB"/>
 							</StackPanel>
 						</StackPanel>
 						<StackPanel Orientation="Horizontal">
 							<StackPanel Orientation="Vertical" Margin="5">
 								<TextBlock Text="Averages Per Match" FontWeight="Bold"/>
-								<TextBlock x:Name="cargoTotalTB"/>
-								<TextBlock x:Name="cargoL1TB"/>
-								<TextBlock x:Name="cargoL2TB"/>
-								<TextBlock x:Name="cargoL3TB"/>
-								<TextBlock x:Name="cargoDropTB"/>
-								<TextBlock x:Name="panelTotalTB"/>
-								<TextBlock x:Name="panelL1TB"/>
-								<TextBlock x:Name="panelL2TB"/>
-								<TextBlock x:Name="panelL3TB"/>
-								<TextBlock x:Name="panelDropTB"/>
-								<TextBlock x:Name="climbPointsTB"/>
-								<TextBlock x:Name="pointsTB"/>
-								<TextBlock x:Name="foulsTB"/>
-								<TextBlock x:Name="defenseTB"/>
-								<TextBlock x:Name="breakdownsTB"/>
+								<TextBlock x:Name="CargoTotalTB"/>
+								<TextBlock x:Name="CargoL1TB"/>
+								<TextBlock x:Name="CargoL2TB"/>
+								<TextBlock x:Name="CargoL3TB"/>
+								<TextBlock x:Name="CargoDropTB"/>
+								<TextBlock x:Name="PanelTotalTB"/>
+								<TextBlock x:Name="PanelL1TB"/>
+								<TextBlock x:Name="PanelL2TB"/>
+								<TextBlock x:Name="PanelL3TB"/>
+								<TextBlock x:Name="PanelDropTB"/>
+								<TextBlock x:Name="PlimbPointsTB"/>
+								<TextBlock x:Name="PointsTB"/>
+								<TextBlock x:Name="FoulsTB"/>
+								<TextBlock x:Name="DefenseTB"/>
+								<TextBlock x:Name="BreakdownsTB"/>
 							</StackPanel>
 							<StackPanel Orientation="Vertical" Margin="5">
 								<TextBlock Text="Maximums" FontWeight="Bold"/>
-								<TextBlock x:Name="maxCargoTB"/>
-								<TextBlock x:Name="maxPanelTB"/>
-								<TextBlock x:Name="maxPointsTB"/>
+								<TextBlock x:Name="MaxCargoTB"/>
+								<TextBlock x:Name="MaxPanelTB"/>
+								<TextBlock x:Name="MaxPointsTB"/>
 							</StackPanel>
 						</StackPanel>
 					</StackPanel>
 				</TabItem>
 				<TabItem Header="Team Trends">
-					<StackPanel Orientation="Vertical" Margin="5">
+					<StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="5">
 						<StackPanel Orientation="Horizontal">
 							<ComboBox x:Name="TeamTrendsSelection" SelectionChanged="TeamTrendsSelection_SelectionChanged"/>
 						</StackPanel>
-						<StackPanel Orientation="Horizontal">
-							<TextBlock x:Name="TeamsTabTitle" Foreground="White" FontSize="24" Margin="5"/>
-						</StackPanel>
-						<StackPanel Orientation="Horizontal">
-							<Canvas x:Name="teamSandstormCargoCanvas" Width="400" Height="150" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
-							<Canvas x:Name="teamSandstormPanelCanvas" Width="400" Height="150" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
-						</StackPanel>
-						<StackPanel Orientation="Horizontal">
-							<Canvas x:Name="teamTeleopCargoCanvas" Width="400" Height="150" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
-							<Canvas x:Name="teamTeleopPanelCanvas" Width="400" Height="150" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
-						</StackPanel>
+						<Canvas x:Name="GamePiecesGraphCanvas" Height="150" Width="400" Margin="5"/>
+						<Canvas x:Name="PointsGraphCanvas" Height="150" Width="400" Margin="5"/>
 					</StackPanel>
 				</TabItem>
 				<TabItem Header="Match History">

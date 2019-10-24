@@ -1,26 +1,32 @@
 ﻿using System;
 
 namespace Team20ScoutingClient {
-	class Stat {
-		public double? Value { get; set; } = null;
+	public class Stat {
 		public string Query { get; set; } = "";
 
-		private string label;
-		private string suffix;
+		private double? value = null;
+		private readonly string 
+			label,
+			suffix;
 
+		/// <summary>
+		/// Initializes an instance of the Stat class.
+		/// </summary>
+		/// <param name="label">Text to display.</param>
+		/// <param name="suffix">Suffix of number (unit, percent, item name, etc.).</param>
 		public Stat(string label, string suffix = "") {
 			this.label = label;
 			this.suffix = suffix;
 		}
 
 		/// <summary>
-		/// Updates Stat.Value by executing Stat.Query on database.
+		/// Updates value by executing query on the database.
 		/// </summary>
 		public void Update() {
 			try {
-				Value = Math.Round(DBClient.ExecuteQuery(Query, true)[0], 2);
+				value = Math.Round(DBClient.ExecuteQuery(Query, true)[0], 2);
 			} catch (ArgumentOutOfRangeException) {
-				Value = null;
+				value = null;
 			}
 		}
 
@@ -29,7 +35,7 @@ namespace Team20ScoutingClient {
 		/// </summary>
 		/// <returns>Stat.Value as a string.</returns>
 		public override string ToString() {
-			return label + ": " + (Value.HasValue ? Value + suffix : "null");
+			return label + ": " + (value.HasValue ? value + suffix : "null");
 		}
 	}
 }
