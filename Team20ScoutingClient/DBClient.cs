@@ -16,7 +16,7 @@ namespace Team20ScoutingClient {
 
 		static DBClient() {
 			Data = new List<List<string>>();
-			filePath = "C:/Users/Andrew/source/repos/Team20ScoutingClient/2019ScoutingData.sqlite";
+			filePath = "C:/Users/Andrew/Documents/Team 20/2019-20/Scouting/Data/2019_rumble_master.sqlite";
 			//if the file doesn't exist...
 			while (!File.Exists(filePath)) {
 				MessageBox.Show("Database file at location \"" + filePath + "\" does not exist.\n\nPlease manually locate the file.", "File not found", MessageBoxButton.OK, MessageBoxImage.Exclamation);

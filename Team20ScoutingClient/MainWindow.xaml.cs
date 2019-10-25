@@ -442,7 +442,7 @@ namespace Team20ScoutingClient {
 		private Stack<CancellationTokenSource> tokenSources;        //TODO: move CancellationToken stuff to BTClient class
 
 		private void InitDataTab() {
-			bt = new BTClient("C:/Users/Andrew/Desktop/", ref BTStatus);
+			bt = new BTClient("C:/Users/Andrew/Documents/Team 20/2019-20/Scouting/Data", ref BTStatus);
 			tokenSources = new Stack<CancellationTokenSource>();
 		}
 
