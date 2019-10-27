@@ -12,7 +12,8 @@ namespace Team20ScoutingClient {
 		private readonly double
 			_height,
 			_width;
-		private Canvas _detailView;
+		private readonly Canvas _detailView;
+
 		private bool _detailViewEnabled;
 
 		/// <summary>
@@ -61,9 +62,10 @@ namespace Team20ScoutingClient {
 				points.Add(new Point(mouseX + 100, mouseY));
 				points.Add(new Point(mouseX + 100, mouseY + 150));
 				points.Add(new Point(mouseX, mouseY + 150));
-				Polygon background = new Polygon();
-				background.Points = points;
-				background.Fill = Brushes.Blue;
+				Polygon background = new Polygon {
+					Points = points,
+					Fill = Brushes.Blue
+				};
 				_detailView.Children.Clear();
 				_detailView.Children.Add(background);
 				if (!Canvas.Children.Contains(_detailView))

@@ -309,14 +309,6 @@ namespace Team20ScoutingClient {
 		private void TeamStatsSelection_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 			RefreshTeamStatsTab();
 		}
-
-		private List<double> ConvertList(List<string> stringList) {
-			List<double> doubleList = new List<double>();
-			foreach (string str in stringList)
-				if (str != "")
-					doubleList.Add(int.Parse(str));
-			return doubleList;
-		}
 		#endregion
 
 		#region Team Trends
