@@ -442,7 +442,7 @@ namespace Team20ScoutingClient {
 		private Stack<CancellationTokenSource> tokenSources;        //TODO: move CancellationToken stuff to BTClient class
 
 		private void InitDataTab() {
-			bt = new BTClient("C:/Users/Andrew/Documents/Team 20/2019-20/Scouting/Data", ref BTStatus);
+			bt = new BTClient("C:/Users/Andrew/Documents/Team 20/2019-20/Scouting/Data/", ref BTStatus);
 			tokenSources = new Stack<CancellationTokenSource>();
 		}
 
@@ -469,13 +469,13 @@ namespace Team20ScoutingClient {
 			if (tokenSources.Count > 0) {
 				MessageBoxResult result = MessageBox.Show("Would you like to cancel all pending transfers?", "I have a question...", MessageBoxButton.YesNo, MessageBoxImage.Question);
 				if (result == MessageBoxResult.Yes)
-					for (int i = tokenSources.Count - 1; i >= 0; i--)
+					for (int i = 0; i < tokenSources.Count; i++)
 						tokenSources.Pop().Cancel();
 			}
 		}
 
 		private void MergeButton_Click(object sender, RoutedEventArgs e) {
-			DBClient.Merge("C:/Users/Andrew/Desktop/", "2019_test");
+			DBClient.Merge("C:/Users/Andrew/Documents/Team 20/2019-2020/Scouting/Data/", "2019_test");
 		}
 		#endregion
 	}

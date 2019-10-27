@@ -10,10 +10,10 @@ namespace Team20ScoutingClient {
 		public Canvas Canvas { get; private set; }
 
 		private readonly double
-			height,
-			width;
-		private Canvas detailView;
-		private bool detailViewEnabled;
+			_height,
+			_width;
+		private Canvas _detailView;
+		private bool _detailViewEnabled;
 
 		/// <summary>
 		/// Initializes an instance of the LineGraph class.
@@ -21,14 +21,14 @@ namespace Team20ScoutingClient {
 		/// <param name="title">Title to be displayed above graph.</param>
 		/// <param name="canvas">Canvas to get dimensions from.</param>
 		public LineGraph(string title, Canvas canvas) {
-			height = canvas.Height;
-			width = canvas.Width;
-			detailView = new Canvas();
-			detailViewEnabled = false;
+			_height = canvas.Height;
+			_width = canvas.Width;
+			_detailView = new Canvas();
+			_detailViewEnabled = false;
 			LinePlots = new List<LinePlot>();
 			Canvas = new Canvas();
 			Canvas.Children.Clear();
-			Canvas.Children.Add(new Rectangle() { Height = height, Width = width, Fill = Brushes.Transparent });
+			Canvas.Children.Add(new Rectangle() { Height = _height, Width = _width, Fill = Brushes.Transparent });
 			Canvas.Children.Add(new TextBlock() { Text = title, FontSize = 14, Foreground = Brushes.White, Margin = new Thickness(0) });
 			//Canvas.MouseEnter += (object sender, System.Windows.Input.MouseEventArgs e) => detailViewEnabled = true;
 			//Canvas.MouseLeave += (object sender, System.Windows.Input.MouseEventArgs e) => detailViewEnabled = false;
@@ -53,7 +53,7 @@ namespace Team20ScoutingClient {
 		}
 
 		private void Canvas_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {       //TODO: keep working on this (for now it is disabled)
-			if (detailViewEnabled) {
+			if (_detailViewEnabled) {
 				PointCollection points = new PointCollection();
 				double mouseX = e.GetPosition(Canvas).X;
 				double mouseY = e.GetPosition(Canvas).Y;
@@ -64,10 +64,10 @@ namespace Team20ScoutingClient {
 				Polygon background = new Polygon();
 				background.Points = points;
 				background.Fill = Brushes.Blue;
-				detailView.Children.Clear();
-				detailView.Children.Add(background);
-				if (!Canvas.Children.Contains(detailView))
-					Canvas.Children.Add(detailView);
+				_detailView.Children.Clear();
+				_detailView.Children.Add(background);
+				if (!Canvas.Children.Contains(_detailView))
+					Canvas.Children.Add(_detailView);
 			}
 		}
 	}

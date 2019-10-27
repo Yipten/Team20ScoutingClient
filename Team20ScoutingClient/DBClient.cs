@@ -10,27 +10,27 @@ namespace Team20ScoutingClient {
 	public static class DBClient {
 		public static List<List<string>> Data { get; }
 
-		private static readonly string filePath;
+		private static readonly string _filePath;
 
-		private static readonly SQLiteConnection connection;
+		private static readonly SQLiteConnection _connection;
 
 		static DBClient() {
 			Data = new List<List<string>>();
-			filePath = "C:/Users/Andrew/Documents/Team 20/2019-20/Scouting/Data/2019_rumble_master.sqlite";
+			_filePath = "C:/Users/Andrew/Documents/Team 20/2019-20/Scouting/Data/2019_rumble_master.sqlite";
 			//if the file doesn't exist...
-			while (!File.Exists(filePath)) {
-				MessageBox.Show("Database file at location \"" + filePath + "\" does not exist.\n\nPlease manually locate the file.", "File not found", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+			while (!File.Exists(_filePath)) {
+				MessageBox.Show("Database file at location \"" + _filePath + "\" does not exist.\n\nPlease manually locate the file.", "File not found", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 				OpenFileDialog openFileDialog = new OpenFileDialog {
 					InitialDirectory = "C:\\",
 					Filter = "SQLite database files (*.db; *.db3; *.sqlite; *.sqlite3)|*.db; *.db3; *.sqlite; *.sqlite3 | All files (*.*)|*.*",
 					FilterIndex = 1
 				};
 				if (openFileDialog.ShowDialog() == true) {
-					filePath = openFileDialog.FileName;
+					_filePath = openFileDialog.FileName;
 				}
 			}
 			//connect to database
-			connection = new SQLiteConnection("Data Source=" + filePath + "; Version=3");
+			_connection = new SQLiteConnection("Data Source=" + _filePath + "; Version=3");
 		}
 
 		/// <summary>
@@ -224,8 +224,8 @@ namespace Team20ScoutingClient {
 		/// <param name="read">True if results are desired. False if not.</param>
 		/// <returns></returns>
 		public static List<double> ExecuteQuery(string query, bool read) {
-			connection.Open();
-			SQLiteCommand command = new SQLiteCommand(query, connection);
+			_connection.Open();
+			SQLiteCommand command = new SQLiteCommand(query, _connection);
 			//comma-separated form of data
 			string dataCSV = "";
 			try {
@@ -242,7 +242,7 @@ namespace Team20ScoutingClient {
 			} finally {
 				command.Dispose();
 			}
-			connection.Close();
+			_connection.Close();
 			//string form of data
 			List<string> dataString;
 			//separate string(s) by commas

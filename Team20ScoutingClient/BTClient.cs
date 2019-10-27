@@ -8,11 +8,11 @@ using System.Windows.Controls;
 
 namespace Team20ScoutingClient {
 	class BTClient {	//TODO: move CancellationToken stuff to here
-		private readonly TextBlock statusDisplay;
+		private readonly TextBlock _statusDisplay;
 
-		private readonly string filePath;
+		private readonly string _filePath;
 
-		private int numReceiving;
+		private int _numReceiving;
 
 		/// <summary>
 		/// Initializes an instance of the BTClient class.
@@ -20,9 +20,9 @@ namespace Team20ScoutingClient {
 		/// <param name="filePath">File path to save recieved files to.</param>
 		/// <param name="statusDisplay">TextBlock to display bluetooth status in.</param>
 		public BTClient(string filePath, ref TextBlock statusDisplay) {
-			this.filePath = filePath;
-			this.statusDisplay = statusDisplay;
-			numReceiving = 0;
+			_filePath = filePath;
+			_statusDisplay = statusDisplay;
+			_numReceiving = 0;
 			UpdateStatus();
 		}
 
@@ -32,8 +32,8 @@ namespace Team20ScoutingClient {
 		/// <param name="token">CancellationToken to cancel transfer.</param>
 		public async void ReceiveFile(CancellationToken token) {
 			if (BluetoothRadio.IsSupported) {
-				if (numReceiving < 6) {
-					numReceiving++;
+				if (_numReceiving < 6) {
+					_numReceiving++;
 					UpdateStatus();
 					//allow radio to be connected to by other devices
 					BluetoothRadio.PrimaryRadio.Mode = RadioMode.Connectable;
@@ -51,7 +51,7 @@ namespace Team20ScoutingClient {
 							string[] pathSplits = request.RawUrl.Split('/');
 							string fileName = pathSplits[pathSplits.Length - 1];
 							//save file
-							request.WriteFile(filePath + fileName);
+							request.WriteFile(_filePath + fileName);
 						}
 					});
 					//start pending transfer
@@ -65,7 +65,7 @@ namespace Team20ScoutingClient {
 					//release resources
 					listener.Stop();
 					listener.Close();
-					numReceiving--;
+					_numReceiving--;
 				} else
 					MessageBox.Show("Number of pending transfers is limited to 6", "FYI", MessageBoxButton.OK, MessageBoxImage.Information);
 			} else
@@ -78,13 +78,13 @@ namespace Team20ScoutingClient {
 		/// </summary>
 		public void UpdateStatus() {
 			string str;
-			if (numReceiving > 0)
-				str = numReceiving + " pending transfers";
+			if (_numReceiving > 0)
+				str = _numReceiving + " pending transfers";
 			else if (BluetoothRadio.IsSupported)
 				str = "ready";
 			else
 				str = "bluetooth disabled";
-			statusDisplay.Text = str;
+			_statusDisplay.Text = str;
 		}
 	}
 }

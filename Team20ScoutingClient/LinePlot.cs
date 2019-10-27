@@ -11,9 +11,9 @@ namespace Team20ScoutingClient {
 		public Polyline Line { get; }
 
 		private readonly double
-			margin,
-			width,
-			height;
+			_margin,
+			_width,
+			_height;
 
 		/// <summary>
 		/// Initializes an instance of the LinePlot class.
@@ -27,9 +27,9 @@ namespace Team20ScoutingClient {
 				Stroke = color,
 				StrokeDashArray = dashed ? new DoubleCollection(new double[] { 4 }) : null
 			};
-			margin = canvas.Height * 0.2;
-			width = canvas.Width;
-			height = canvas.Height * 0.8;
+			_margin = canvas.Height * 0.2;
+			_width = canvas.Width;
+			_height = canvas.Height * 0.8;
 		}
 
 		/// <summary>
@@ -51,13 +51,13 @@ namespace Team20ScoutingClient {
 				List<double> scaledData = new List<double>();
 				double min = MinValue(data);
 				double max = MaxValue(data);
-				double vertScale = height / (max - min);
+				double vertScale = _height / (max - min);
 				foreach (double item in data)
 					scaledData.Add((item - min) * vertScale);
 				PointCollection points = new PointCollection();
-				double horScale = width / (data.Count - 1);
+				double horScale = _width / (data.Count - 1);
 				for (int i = 0; i < data.Count; i++)
-					points.Add(new Point(horScale * i, height + margin - scaledData[i]));
+					points.Add(new Point(horScale * i, _height + _margin - scaledData[i]));
 				Line.Points = points;
 			} catch (ArgumentOutOfRangeException) {
 				Line.Points = null;
