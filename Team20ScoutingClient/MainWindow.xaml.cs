@@ -430,43 +430,29 @@ namespace Team20ScoutingClient {
 
 		#region Data Management
 		private BTClient _bt;
-		private Stack<CancellationTokenSource> _tokenSources;        //TODO: move CancellationToken stuff to BTClient class
 
 		private void InitDataTab() {
 			_bt = new BTClient("C:/Users/Andrew/Documents/Team 20/2019-20/Scouting/Data/", ref BTStatus);
-			_tokenSources = new Stack<CancellationTokenSource>();
 		}
 
 		private void RefreshDataTab() {
 			_bt.UpdateStatus();
 		}
 
-		private void ReceiveButton_Click(object sender, RoutedEventArgs e) {    //TODO: only perform action if bluetooth is enabled
-			if (_tokenSources.Count < 6) {
-				_tokenSources.Push(new CancellationTokenSource());
-				_bt.ReceiveFile(_tokenSources.Peek().Token);
-			}
+		private void ReceiveButton_Click(object sender, RoutedEventArgs e) {
+			_bt.ReceiveFile();
 		}
 
 		private void CancelOneButton_Click(object sender, RoutedEventArgs e) {
-			if (_tokenSources.Count > 0) {
-				MessageBoxResult result = MessageBox.Show("Would you like to cancel one pending transfer?", "I have a question...", MessageBoxButton.YesNo, MessageBoxImage.Question);
-				if (result == MessageBoxResult.Yes)
-					_tokenSources.Pop().Cancel();
-			}
+			_bt.CancelOne();
 		}
 
 		private void CancelAllButton_Click(object sender, RoutedEventArgs e) {
-			if (_tokenSources.Count > 0) {
-				MessageBoxResult result = MessageBox.Show("Would you like to cancel all pending transfers?", "I have a question...", MessageBoxButton.YesNo, MessageBoxImage.Question);
-				if (result == MessageBoxResult.Yes)
-					for (int i = 0; i < _tokenSources.Count; i++)
-						_tokenSources.Pop().Cancel();
-			}
+			_bt.CancelAll();
 		}
 
 		private void MergeButton_Click(object sender, RoutedEventArgs e) {
-			DBClient.Merge("C:/Users/Andrew/Documents/Team 20/2019-2020/Scouting/Data/", "2019_test");
+			DBClient.Merge("C:/Users/Andrew/Documents/Team 20/2019-2020/Scouting/Data/", "2019_rumble");
 		}
 		#endregion
 	}

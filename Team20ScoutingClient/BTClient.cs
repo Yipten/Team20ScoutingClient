@@ -1,17 +1,18 @@
 ﻿using InTheHand.Net;
 using InTheHand.Net.Bluetooth;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace Team20ScoutingClient {
-	class BTClient {	//TODO: move CancellationToken stuff to here
+	class BTClient {
 		private readonly TextBlock _statusDisplay;
-
 		private readonly string _filePath;
 
+		private Stack<CancellationTokenSource> _tokenSources;
 		private int _numReceiving;
 
 		/// <summary>
@@ -22,6 +23,7 @@ namespace Team20ScoutingClient {
 		public BTClient(string filePath, ref TextBlock statusDisplay) {
 			_filePath = filePath;
 			_statusDisplay = statusDisplay;
+			_tokenSources = new Stack<CancellationTokenSource>();
 			_numReceiving = 0;
 			UpdateStatus();
 		}
@@ -30,39 +32,42 @@ namespace Team20ScoutingClient {
 		/// Recieves one file via bluetooth.
 		/// </summary>
 		/// <param name="token">CancellationToken to cancel transfer.</param>
-		public async void ReceiveFile(CancellationToken token) {
+		public async void ReceiveFile() {
 			if (BluetoothRadio.IsSupported) {
 				if (_numReceiving < 6) {
 					_numReceiving++;
 					UpdateStatus();
-					//allow radio to be connected to by other devices
+					// add new CancellationTokenSource for this file transfer
+					_tokenSources.Push(new CancellationTokenSource());
+					CancellationToken token = _tokenSources.Peek().Token;
+					// allow radio to be connected to by other devices
 					BluetoothRadio.PrimaryRadio.Mode = RadioMode.Connectable;
-					//wait for file to be received in a separate thread
+					// wait for file to be received in a separate thread
 					ObexListener listener = new ObexListener(ObexTransport.Bluetooth);
-					//allow files to be received
+					// allow files to be received
 					listener.Start();
 					Task t = new Task(() => {
-						//wait for file to be received
+						// wait for file to be received
 						ObexListenerContext context = listener.GetContext();
 						if (context != null) {
-							//get file information
+							// get file information
 							ObexListenerRequest request = context.Request;
-							//keep original file name
+							// keep original file name
 							string[] pathSplits = request.RawUrl.Split('/');
 							string fileName = pathSplits[pathSplits.Length - 1];
-							//save file
+							// save file
 							request.WriteFile(_filePath + fileName);
 						}
 					});
-					//start pending transfer
+					// start pending transfer
 					t.Start();
 					await Task.Run(() => {
 						try {
-							//waits until transfer is finished or is cancelled
+							// waits until transfer is finished or is cancelled
 							t.Wait(token);
 						} catch (OperationCanceledException) { }
 					});
-					//release resources
+					// release resources
 					listener.Stop();
 					listener.Close();
 					_numReceiving--;
@@ -71,6 +76,31 @@ namespace Team20ScoutingClient {
 			} else
 				MessageBox.Show("Bluetooth must be enabled on your device in order to transfer files", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 			UpdateStatus();
+		}
+
+		/// <summary>
+		/// Cancels one pending bluetooth transfer.
+		/// </summary>
+		public void CancelOne() {
+			if (_numReceiving > 0) {
+				MessageBoxResult result = MessageBox.Show("Would you like to cancel one pending transfer?", "I have a question...", MessageBoxButton.YesNo, MessageBoxImage.Question);
+				if (result == MessageBoxResult.Yes)
+					_tokenSources.Pop().Cancel();
+			}
+		}
+
+		/// <summary>
+		/// Cancels all pending bluetooth transfers.
+		/// </summary>
+		public void CancelAll() {
+			if (_numReceiving > 0) {
+				MessageBoxResult result = MessageBox.Show("Would you like to cancel all pending transfers?", "I have a question...", MessageBoxButton.YesNo, MessageBoxImage.Question);
+				if (result == MessageBoxResult.Yes) {
+					int numTokenSources = _tokenSources.Count;
+					for (int i = 0; i < numTokenSources; i++)
+						_tokenSources.Pop().Cancel();
+				}
+			}
 		}
 
 		/// <summary>
