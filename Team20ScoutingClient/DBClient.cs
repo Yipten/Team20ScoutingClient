@@ -38,7 +38,15 @@ namespace Team20ScoutingClient {
 		/// </summary>
 		/// <param name="path">File path where databases from tablets are stored.</param>
 		/// <param name="databases">Array of database file names to merge from.</param>
-		public static void Merge(string path, params string[] databases) {
+		public static void Merge(string path, string fileName) {
+			string[] databases = {
+				"Blue 1 " + fileName + ".sqlite",
+				"Blue 2 " + fileName + ".sqlite",
+				"Blue 3 " + fileName + ".sqlite",
+				"Red 1 " + fileName + ".sqlite",
+				"Red 2 " + fileName + ".sqlite",
+				"Red 3 " + fileName + ".sqlite",
+			};
 			int dbNum = 0;
 			foreach (string db in databases) {
 				string pathTemp = path + db + ".sqlite";
@@ -47,7 +55,9 @@ namespace Team20ScoutingClient {
 					continue;
 				// query to merge data into database on computer
 				ExecuteQuery(
+					// attach database to merge data from
 					"ATTACH DATABASE '" + pathTemp + "' AS db" + dbNum + ";" +
+					// insert data into master database
 					"INSERT INTO RawData(" +
 						"ScoutName, " +
 						"MatchNumber," +
@@ -131,6 +141,7 @@ namespace Team20ScoutingClient {
 						"Comments" +
 					" " +
 					"FROM db" + dbNum + ".RawData;" +
+					// detach database when done
 					"DETACH DATABASE db" + dbNum + ";",
 					false
 				);
@@ -146,76 +157,6 @@ namespace Team20ScoutingClient {
 				dbNum++;
 			}
 		}
-
-		[Obsolete("This method does nothing and will be removed in the future")]
-		public static bool GetData(string table, string[] columns, string filter = null, string filterValue = null, string orderBy = null) {
-			////if the file path was not specified...
-			//if (filePath == "") {
-			//	MessageBox.Show("Database filepath not specified.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-			//	return false;
-			//}
-			////build query
-			//string query = "";
-			//query += "SELECT ";
-			//for (int i = 0; i < columns.Length; i++) {
-			//	query += columns[i];
-			//	if (i != columns.Length - 1) {
-			//		query += ", ";
-			//	}
-			//}
-			//query += " FROM " + table;
-			//if (filter != null || filterValue != null) {
-			//	query += " WHERE " + filter + " = " + filterValue;
-			//}
-
-			//if (orderBy != null) {
-			//	query += " ORDER BY " + orderBy + " ASC";
-			//}
-
-			//query += ";";
-			////execute query to get requested data
-			//List<string> dataString = null;//ExecuteQuery(query, true);
-			//							   //if the array is empty...
-			//foreach (string item in dataString)
-			//	if (item == "")
-			//		return false;
-			////clear previous data
-			//Data.Clear();
-			////separate string by commas
-			//for (int i = 0; i < dataString.Count; i++)
-			//	Data.Add(dataString[i].Split(',').ToList());
-			//foreach (List<string> x in Data)
-			//	x.Remove("");
-			//return true;
-			return false;
-		}
-
-		//public static List<string> ExecuteQuery(string query, bool read, int numColumns) {
-		//	connection.Open();
-		//	SQLiteCommand command = new SQLiteCommand(query, connection);
-		//	//string to be built and returned
-		//	List<string> output = new List<string>();
-		//	for (int i = 0; i < numColumns; i++) {
-		//		output.Add("");
-		//	}
-
-		//	try {
-		//		if (read) {
-		//			SQLiteDataReader reader = command.ExecuteReader();
-		//			while (reader.Read()) {
-		//				for (int i = 0; i < reader.FieldCount; i++) {
-		//					output[i] += reader[i] + ",";
-		//				}
-		//			}
-		//		} else {
-		//			output[0] = command.ExecuteNonQuery().ToString();
-		//		}
-		//	} catch (SQLiteException) {
-		//		MessageBox.Show("SQLiteException thrown", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-		//	}
-		//	connection.Close();
-		//	return output;
-		//}
 
 		/// <summary>
 		/// Executes a query on the connected SQLite database.
