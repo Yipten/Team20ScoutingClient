@@ -452,7 +452,7 @@ namespace Team20ScoutingClient {
 		}
 
 		private void MergeButton_Click(object sender, RoutedEventArgs e) {
-			DBClient.Merge("C:/Users/Andrew/Documents/Team 20/2019-2020/Scouting/Data/", "2019_rumble");
+			DBClient.Merge("C:/Users/Andrew/Documents/Team 20/2019-20/Scouting/Data/", "2019_rumble");
 		}
 		#endregion
 	}

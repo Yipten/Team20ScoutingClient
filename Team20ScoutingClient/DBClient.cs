@@ -40,12 +40,12 @@ namespace Team20ScoutingClient {
 		/// <param name="databases">Array of database file names to merge from.</param>
 		public static void Merge(string path, string fileName) {
 			string[] databases = {
-				"Blue 1 " + fileName + ".sqlite",
-				"Blue 2 " + fileName + ".sqlite",
-				"Blue 3 " + fileName + ".sqlite",
-				"Red 1 " + fileName + ".sqlite",
-				"Red 2 " + fileName + ".sqlite",
-				"Red 3 " + fileName + ".sqlite",
+				"Blue 1 " + fileName,
+				"Blue 2 " + fileName,
+				"Blue 3 " + fileName,
+				"Red 1 " + fileName,
+				"Red 2 " + fileName,
+				"Red 3 " + fileName,
 			};
 			int dbNum = 0;
 			foreach (string db in databases) {
