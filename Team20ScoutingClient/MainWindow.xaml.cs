@@ -32,83 +32,83 @@ namespace Team20ScoutingClient {
 		#endregion
 
 		#region Team Stats
-		private Stat[] stats;
+		private Stat[] _stats;
 		private Stat
 			// percent success
-			habLineL1Stat,
-			habLineL2Stat,
-			climbL1Stat,
-			climbL2Stat,
-			climbL3Stat,
+			_habLineL1Stat,
+			_habLineL2Stat,
+			_climbL1Stat,
+			_climbL2Stat,
+			_climbL3Stat,
 			// average per match
-			cargoTotalStat,
-			cargoL1Stat,
-			cargoL2Stat,
-			cargoL3Stat,
-			cargoDropStat,
-			panelTotalStat,
-			panelL1Stat,
-			panelL2Stat,
-			panelL3Stat,
-			panelDropStat,
-			climbPointsStat,
-			pointsStat,
-			foulsStat,
-			defenseStat,
-			breakdownsStat,
+			_cargoTotalStat,
+			_cargoL1Stat,
+			_cargoL2Stat,
+			_cargoL3Stat,
+			_cargoDropStat,
+			_panelTotalStat,
+			_panelL1Stat,
+			_panelL2Stat,
+			_panelL3Stat,
+			_panelDropStat,
+			_climbPointsStat,
+			_pointsStat,
+			_foulsStat,
+			_defenseStat,
+			_breakdownsStat,
 			// maximum
-			maxCargoStat,
-			maxPanelStat,
-			maxPointsStat;
+			_maxCargoStat,
+			_maxPanelStat,
+			_maxPointsStat;
 
 		private void InitTeamStatsTab() {
-			habLineL1Stat = new Stat("L1", "%");
-			habLineL2Stat = new Stat("L2", "%");
-			climbL1Stat = new Stat("L1", "%");
-			climbL2Stat = new Stat("L2", "%");
-			climbL3Stat = new Stat("L3", "%");
-			cargoTotalStat = new Stat("All Cargo");
-			cargoL1Stat = new Stat("L1 Cargo");
-			cargoL2Stat = new Stat("L2 Cargo");
-			cargoL3Stat = new Stat("L3 Cargo");
-			cargoDropStat = new Stat("Cargo Drops");
-			panelTotalStat = new Stat("All Hatch Panels");
-			panelL1Stat = new Stat("L1 Hatch Panels");
-			panelL2Stat = new Stat("L2 Hatch Panels");
-			panelL3Stat = new Stat("L3 Hatch Panels");
-			panelDropStat = new Stat("Hatch Panel Drops");
-			climbPointsStat = new Stat("Climbing Points");
-			pointsStat = new Stat("Points");
-			foulsStat = new Stat("Fouls");
-			defenseStat = new Stat("Defense Rating");
-			breakdownsStat = new Stat("Breakdowns");
-			maxCargoStat = new Stat("Cargo");
-			maxPanelStat = new Stat("Hatch Panels");
-			maxPointsStat = new Stat("Points");
-			stats = new Stat[] {
-				habLineL1Stat,
-				habLineL2Stat,
-				climbL1Stat,
-				climbL2Stat,
-				climbL3Stat,
-				cargoTotalStat,
-				cargoL1Stat,
-				cargoL2Stat,
-				cargoL3Stat,
-				cargoDropStat,
-				panelTotalStat,
-				panelL1Stat,
-				panelL2Stat,
-				panelL3Stat,
-				panelDropStat,
-				climbPointsStat,
-				pointsStat,
-				foulsStat,
-				defenseStat,
-				breakdownsStat,
-				maxCargoStat,
-				maxPanelStat,
-				maxPointsStat
+			_habLineL1Stat = new Stat("L1", "%");
+			_habLineL2Stat = new Stat("L2", "%");
+			_climbL1Stat = new Stat("L1", "%");
+			_climbL2Stat = new Stat("L2", "%");
+			_climbL3Stat = new Stat("L3", "%");
+			_cargoTotalStat = new Stat("All Cargo");
+			_cargoL1Stat = new Stat("L1 Cargo");
+			_cargoL2Stat = new Stat("L2 Cargo");
+			_cargoL3Stat = new Stat("L3 Cargo");
+			_cargoDropStat = new Stat("Cargo Drops");
+			_panelTotalStat = new Stat("All Hatch Panels");
+			_panelL1Stat = new Stat("L1 Hatch Panels");
+			_panelL2Stat = new Stat("L2 Hatch Panels");
+			_panelL3Stat = new Stat("L3 Hatch Panels");
+			_panelDropStat = new Stat("Hatch Panel Drops");
+			_climbPointsStat = new Stat("Climbing Points");
+			_pointsStat = new Stat("Points");
+			_foulsStat = new Stat("Fouls");
+			_defenseStat = new Stat("Defense Rating");
+			_breakdownsStat = new Stat("Breakdowns");
+			_maxCargoStat = new Stat("Cargo");
+			_maxPanelStat = new Stat("Hatch Panels");
+			_maxPointsStat = new Stat("Points");
+			_stats = new Stat[] {
+				_habLineL1Stat,
+				_habLineL2Stat,
+				_climbL1Stat,
+				_climbL2Stat,
+				_climbL3Stat,
+				_cargoTotalStat,
+				_cargoL1Stat,
+				_cargoL2Stat,
+				_cargoL3Stat,
+				_cargoDropStat,
+				_panelTotalStat,
+				_panelL1Stat,
+				_panelL2Stat,
+				_panelL3Stat,
+				_panelDropStat,
+				_climbPointsStat,
+				_pointsStat,
+				_foulsStat,
+				_defenseStat,
+				_breakdownsStat,
+				_maxCargoStat,
+				_maxPanelStat,
+				_maxPointsStat
 			};
 			// clear items just in case
 			TeamStatsSelection.Items.Clear();
@@ -139,67 +139,67 @@ namespace Team20ScoutingClient {
 				if (!TeamStatsSelection.Items.Contains(team.ToString()))
 					TeamStatsSelection.Items.Add(team.ToString());
 			// create SQL queries
-			habLineL1Stat.Query =
+			_habLineL1Stat.Query =
 				"SELECT 100.0 * SUM(CrossHabLine) / COUNT() " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + " AND StartPosition BETWEEN 3 AND 5;";
-			habLineL2Stat.Query =
+			_habLineL2Stat.Query =
 				"SELECT 100.0 * SUM(CrossHabLine) / COUNT() " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + " AND StartPosition BETWEEN 1 AND 2;";
-			climbL1Stat.Query =
+			_climbL1Stat.Query =
 				"SELECT 100.0 * COUNT(CASE WHEN HabLevelAchieved = 1 THEN HabLevelAchieved ELSE NULL END) / COUNT() " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + " AND HabLevelAttempted = 1;";
-			climbL2Stat.Query =
+			_climbL2Stat.Query =
 				"SELECT 100.0 * COUNT(CASE WHEN HabLevelAchieved = 2 THEN HabLevelAchieved ELSE NULL END) / COUNT() " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + " AND HabLevelAttempted = 2;";
-			climbL3Stat.Query =
+			_climbL3Stat.Query =
 				"SELECT 100.0 * COUNT(CASE WHEN HabLevelAchieved = 3 THEN HabLevelAchieved ELSE NULL END) / COUNT() " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + " AND HabLevelAttempted = 3;";
-			cargoTotalStat.Query =
+			_cargoTotalStat.Query =
 				"SELECT AVG(SandCargoShip + SandCargoRocket1 + SandCargoRocket2 + SandCargoRocket3 + TeleCargoShip + TeleCargoRocket1 + TeleCargoRocket2 + TeleCargoRocket3) " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + ";";
-			cargoL1Stat.Query =
+			_cargoL1Stat.Query =
 				"SELECT AVG(SandCargoShip + SandCargoRocket1 + TeleCargoShip + TeleCargoRocket1) " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + ";";
-			cargoL2Stat.Query =
+			_cargoL2Stat.Query =
 				"SELECT AVG(SandCargoRocket2 + TeleCargoRocket2) " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + ";";
-			cargoL3Stat.Query =
+			_cargoL3Stat.Query =
 				"SELECT AVG(SandCargoRocket3 + TeleCargoRocket3) " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + ";";
-			cargoDropStat.Query =
+			_cargoDropStat.Query =
 				"SELECT AVG(SandCargoDrop + TeleCargoDrop) " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + ";";
-			panelTotalStat.Query =
+			_panelTotalStat.Query =
 				"SELECT AVG(SandPanelShip + SandPanelRocket1 + SandPanelRocket2 + SandPanelRocket3 + TelePanelShip + TelePanelRocket1 + TelePanelRocket2 + TelePanelRocket3) " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + ";";
-			panelL1Stat.Query =
+			_panelL1Stat.Query =
 				"SELECT AVG(SandPanelShip + SandPanelRocket1 + TelePanelShip + TelePanelRocket1) " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + ";";
-			panelL2Stat.Query =
+			_panelL2Stat.Query =
 				"SELECT AVG(SandPanelRocket2 + TelePanelRocket2) " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + ";";
-			panelL3Stat.Query =
+			_panelL3Stat.Query =
 				"SELECT AVG(SandPanelRocket3 + TelePanelRocket3) " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + ";";
-			panelDropStat.Query =
+			_panelDropStat.Query =
 				"SELECT AVG(SandPanelDrop + TelePanelDrop) " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + ";";
-			climbPointsStat.Query =
+			_climbPointsStat.Query =
 				"SELECT AVG( " +
 					"CASE " +
 						"WHEN HabLevelAchieved = 0 THEN 0 " +
@@ -210,7 +210,7 @@ namespace Team20ScoutingClient {
 				") " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + ";";
-			pointsStat.Query =
+			_pointsStat.Query =
 				"SELECT AVG( " +
 					"CASE " +
 						"WHEN CrossHabLine = 1 THEN " +
@@ -231,15 +231,15 @@ namespace Team20ScoutingClient {
 				") " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + ";";
-			foulsStat.Query =
+			_foulsStat.Query =
 				"SELECT AVG(Fouls) " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + ";";
-			defenseStat.Query =
+			_defenseStat.Query =
 				"SELECT AVG(DefenseSkill) " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + ";";
-			breakdownsStat.Query =
+			_breakdownsStat.Query =
 				"SELECT AVG(" +
 					"CASE " +
 						"WHEN Breakdown = 'N/A' THEN 0 " +
@@ -248,15 +248,15 @@ namespace Team20ScoutingClient {
 				") " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + ";";
-			maxCargoStat.Query =
+			_maxCargoStat.Query =
 				"SELECT max(SandCargoRocket1 + SandCargoRocket2 + SandCargoRocket3 + SandCargoShip + TeleCargoRocket1 + TeleCargoRocket2 + TeleCargoRocket3 + TeleCargoShip) " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + ";";
-			maxPanelStat.Query =
+			_maxPanelStat.Query =
 				"SELECT max(SandPanelRocket1 + SandPanelRocket2 + SandPanelRocket3 + SandPanelShip + TelePanelRocket1 + TelePanelRocket2 + TelePanelRocket3 + TelePanelShip) " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + ";";
-			maxPointsStat.Query =
+			_maxPointsStat.Query =
 				"SELECT MAX( " +
 					"CASE " +
 						"WHEN CrossHabLine = 1 THEN " +
@@ -278,32 +278,32 @@ namespace Team20ScoutingClient {
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamStatsSelection.SelectedItem.ToString() + ";";
 			// update values of all stats
-			foreach (Stat s in stats)
+			foreach (Stat s in _stats)
 				s.Update();
 			// display stat values in UI
-			HabLineL1TB.Text = habLineL1Stat.ToString();
-			HabLineL2TB.Text = habLineL2Stat.ToString();
-			ClimbL1TB.Text = climbL1Stat.ToString();
-			ClimbL2TB.Text = climbL2Stat.ToString();
-			ClimbL3TB.Text = climbL3Stat.ToString();
-			CargoTotalTB.Text = cargoTotalStat.ToString();
-			CargoL1TB.Text = cargoL1Stat.ToString();
-			CargoL2TB.Text = cargoL2Stat.ToString();
-			CargoL3TB.Text = cargoL3Stat.ToString();
-			CargoDropTB.Text = cargoDropStat.ToString();
-			PanelTotalTB.Text = panelTotalStat.ToString();
-			PanelL1TB.Text = panelL1Stat.ToString();
-			PanelL2TB.Text = panelL2Stat.ToString();
-			PanelL3TB.Text = panelL3Stat.ToString();
-			PanelDropTB.Text = panelDropStat.ToString();
-			PlimbPointsTB.Text = climbPointsStat.ToString();
-			PointsTB.Text = pointsStat.ToString();
-			FoulsTB.Text = foulsStat.ToString();
-			DefenseTB.Text = defenseStat.ToString();
-			BreakdownsTB.Text = breakdownsStat.ToString();
-			MaxCargoTB.Text = maxCargoStat.ToString();
-			MaxPanelTB.Text = maxPanelStat.ToString();
-			MaxPointsTB.Text = maxPointsStat.ToString();
+			HabLineL1TB.Text = _habLineL1Stat.ToString();
+			HabLineL2TB.Text = _habLineL2Stat.ToString();
+			ClimbL1TB.Text = _climbL1Stat.ToString();
+			ClimbL2TB.Text = _climbL2Stat.ToString();
+			ClimbL3TB.Text = _climbL3Stat.ToString();
+			CargoTotalTB.Text = _cargoTotalStat.ToString();
+			CargoL1TB.Text = _cargoL1Stat.ToString();
+			CargoL2TB.Text = _cargoL2Stat.ToString();
+			CargoL3TB.Text = _cargoL3Stat.ToString();
+			CargoDropTB.Text = _cargoDropStat.ToString();
+			PanelTotalTB.Text = _panelTotalStat.ToString();
+			PanelL1TB.Text = _panelL1Stat.ToString();
+			PanelL2TB.Text = _panelL2Stat.ToString();
+			PanelL3TB.Text = _panelL3Stat.ToString();
+			PanelDropTB.Text = _panelDropStat.ToString();
+			PlimbPointsTB.Text = _climbPointsStat.ToString();
+			PointsTB.Text = _pointsStat.ToString();
+			FoulsTB.Text = _foulsStat.ToString();
+			DefenseTB.Text = _defenseStat.ToString();
+			BreakdownsTB.Text = _breakdownsStat.ToString();
+			MaxCargoTB.Text = _maxCargoStat.ToString();
+			MaxPanelTB.Text = _maxPanelStat.ToString();
+			MaxPointsTB.Text = _maxPointsStat.ToString();
 		}
 
 		private void TeamStatsSelection_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -312,37 +312,37 @@ namespace Team20ScoutingClient {
 		#endregion
 
 		#region Team Trends
-		private LineGraph[] lineGraphs;
+		private LineGraph[] _lineGraphs;
 		private LineGraph
-			gamePiecesGraph,
-			pointsGraph;
+			_gamePiecesGraph,
+			_pointsGraph;
 		private LinePlot
-			sandCargePlot,
-			sandPanelPlot,
-			teleCargoPlot,
-			telePanelPlot,
-			habLevelPlot,
-			pointsPlot;
+			_sandCargePlot,
+			_sandPanelPlot,
+			_teleCargoPlot,
+			_telePanelPlot,
+			_habLevelPlot,
+			_pointsPlot;
 
 		private void InitTeamTrendsTab() {
 			// initialize graphs
-			gamePiecesGraph = new LineGraph("Game Pieces", GamePiecesGraphCanvas);
-			sandCargePlot = new LinePlot(Brushes.Orange, true, GamePiecesGraphCanvas);
-			sandPanelPlot = new LinePlot(Brushes.Yellow, true, GamePiecesGraphCanvas);
-			teleCargoPlot = new LinePlot(Brushes.Orange, false, GamePiecesGraphCanvas);
-			telePanelPlot = new LinePlot(Brushes.Yellow, false, GamePiecesGraphCanvas);
-			habLevelPlot = new LinePlot(Brushes.Red, false, GamePiecesGraphCanvas);
-			gamePiecesGraph.LinePlots.Add(sandCargePlot);
-			gamePiecesGraph.LinePlots.Add(sandPanelPlot);
-			gamePiecesGraph.LinePlots.Add(teleCargoPlot);
-			gamePiecesGraph.LinePlots.Add(telePanelPlot);
-			gamePiecesGraph.LinePlots.Add(habLevelPlot);
-			GamePiecesGraphCanvas.Children.Add(gamePiecesGraph.Canvas);
-			pointsGraph = new LineGraph("Points", PointsGraphCanvas);
-			pointsPlot = new LinePlot(Brushes.Red, false, PointsGraphCanvas);
-			pointsGraph.LinePlots.Add(pointsPlot);
-			PointsGraphCanvas.Children.Add(pointsGraph.Canvas);
-			lineGraphs = new LineGraph[] { gamePiecesGraph, pointsGraph };
+			_gamePiecesGraph = new LineGraph("Game Pieces", GamePiecesGraphCanvas);
+			_sandCargePlot = new LinePlot(Brushes.Orange, true, GamePiecesGraphCanvas);
+			_sandPanelPlot = new LinePlot(Brushes.Yellow, true, GamePiecesGraphCanvas);
+			_teleCargoPlot = new LinePlot(Brushes.Orange, false, GamePiecesGraphCanvas);
+			_telePanelPlot = new LinePlot(Brushes.Yellow, false, GamePiecesGraphCanvas);
+			_habLevelPlot = new LinePlot(Brushes.Red, false, GamePiecesGraphCanvas);
+			_gamePiecesGraph.LinePlots.Add(_sandCargePlot);
+			_gamePiecesGraph.LinePlots.Add(_sandPanelPlot);
+			_gamePiecesGraph.LinePlots.Add(_teleCargoPlot);
+			_gamePiecesGraph.LinePlots.Add(_telePanelPlot);
+			_gamePiecesGraph.LinePlots.Add(_habLevelPlot);
+			GamePiecesGraphCanvas.Children.Add(_gamePiecesGraph.Canvas);
+			_pointsGraph = new LineGraph("Points", PointsGraphCanvas);
+			_pointsPlot = new LinePlot(Brushes.Red, false, PointsGraphCanvas);
+			_pointsGraph.LinePlots.Add(_pointsPlot);
+			PointsGraphCanvas.Children.Add(_pointsGraph.Canvas);
+			_lineGraphs = new LineGraph[] { _gamePiecesGraph, _pointsGraph };
 			// clear items just in case
 			TeamTrendsSelection.Items.Clear();
 			// get distinct team numbers in database
@@ -359,32 +359,32 @@ namespace Team20ScoutingClient {
 		}
 
 		private void RefreshTeamTrendsTab() {
-			sandCargePlot.Query =
+			_sandCargePlot.Query =
 				"SELECT SandCargoShip + SandCargoRocket1 + SandCargoRocket2 + SandCargoRocket3 " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamTrendsSelection.SelectedItem.ToString() + " " +
 				"ORDER BY MatchNumber;";
-			sandPanelPlot.Query =
+			_sandPanelPlot.Query =
 				"SELECT SandPanelShip + SandPanelRocket1 + SandPanelRocket2 + SandPanelRocket3 " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamTrendsSelection.SelectedItem.ToString() + " " +
 				"ORDER BY MatchNumber;";
-			teleCargoPlot.Query =
+			_teleCargoPlot.Query =
 				"SELECT TeleCargoShip + TeleCargoRocket1 + TeleCargoRocket2 + TeleCargoRocket3 " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamTrendsSelection.SelectedItem.ToString() + " " +
 				"ORDER BY MatchNumber;";
-			telePanelPlot.Query = 
+			_telePanelPlot.Query = 
 				"SELECT TelePanelShip + TelePanelRocket1 + TelePanelRocket2 + TelePanelRocket3 " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamTrendsSelection.SelectedItem.ToString() + " " +
 				"ORDER BY MatchNumber;";
-			habLevelPlot.Query =
+			_habLevelPlot.Query =
 				"SELECT HabLevelAchieved " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamTrendsSelection.SelectedItem.ToString() + " " +
 				"ORDER BY MatchNumber;";
-			pointsPlot.Query =
+			_pointsPlot.Query =
 				"SELECT " +
 					"CASE " +
 						"WHEN CrossHabLine = 1 THEN " +
@@ -406,7 +406,7 @@ namespace Team20ScoutingClient {
 				"WHERE TeamNumber = " + TeamTrendsSelection.SelectedItem.ToString() + " " +
 				"ORDER BY MatchNumber;";
 			//GamePiecesGraphCanvas.Children.Clear();
-			foreach (LineGraph lineGraph in lineGraphs)
+			foreach (LineGraph lineGraph in _lineGraphs)
 				lineGraph.Update();
 			//GamePiecesGraphCanvas.Children.Add(gamePiecesGraph.Canvas);
 		}
@@ -429,45 +429,30 @@ namespace Team20ScoutingClient {
 		#endregion
 
 		#region Data Management
-		private BTClient bt;
-
-		private Stack<CancellationTokenSource> tokenSources;        //TODO: move CancellationToken stuff to BTClient class
+		private BTClient _bt;
 
 		private void InitDataTab() {
-			bt = new BTClient("C:/Users/Andrew/Documents/Team 20/2019-20/Scouting/Data/", ref BTStatus);
-			tokenSources = new Stack<CancellationTokenSource>();
+			_bt = new BTClient("C:/Users/Andrew/Documents/Team 20/2019-20/Scouting/Data/", ref BTStatus);
 		}
 
 		private void RefreshDataTab() {
-			bt.UpdateStatus();
+			_bt.UpdateStatus();
 		}
 
-		private void ReceiveButton_Click(object sender, RoutedEventArgs e) {    //TODO: only perform action if bluetooth is enabled
-			if (tokenSources.Count < 6) {
-				tokenSources.Push(new CancellationTokenSource());
-				bt.ReceiveFile(tokenSources.Peek().Token);
-			}
+		private void ReceiveButton_Click(object sender, RoutedEventArgs e) {
+			_bt.ReceiveFile();
 		}
 
 		private void CancelOneButton_Click(object sender, RoutedEventArgs e) {
-			if (tokenSources.Count > 0) {
-				MessageBoxResult result = MessageBox.Show("Would you like to cancel one pending transfer?", "I have a question...", MessageBoxButton.YesNo, MessageBoxImage.Question);
-				if (result == MessageBoxResult.Yes)
-					tokenSources.Pop().Cancel();
-			}
+			_bt.CancelOne();
 		}
 
 		private void CancelAllButton_Click(object sender, RoutedEventArgs e) {
-			if (tokenSources.Count > 0) {
-				MessageBoxResult result = MessageBox.Show("Would you like to cancel all pending transfers?", "I have a question...", MessageBoxButton.YesNo, MessageBoxImage.Question);
-				if (result == MessageBoxResult.Yes)
-					for (int i = 0; i < tokenSources.Count; i++)
-						tokenSources.Pop().Cancel();
-			}
+			_bt.CancelAll();
 		}
 
 		private void MergeButton_Click(object sender, RoutedEventArgs e) {
-			DBClient.Merge("C:/Users/Andrew/Documents/Team 20/2019-2020/Scouting/Data/", "2019_test");
+			DBClient.Merge("C:/Users/Andrew/Documents/Team 20/2019-20/Scouting/Data/", "2019_rumble");
 		}
 		#endregion
 	}
