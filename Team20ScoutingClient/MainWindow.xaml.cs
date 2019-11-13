@@ -317,7 +317,7 @@ namespace Team20ScoutingClient {
 			_gamePiecesGraph,
 			_pointsGraph;
 		private LinePlot
-			_sandCargePlot,
+			_sandCargoPlot,
 			_sandPanelPlot,
 			_teleCargoPlot,
 			_telePanelPlot,
@@ -327,12 +327,12 @@ namespace Team20ScoutingClient {
 		private void InitTeamTrendsTab() {
 			// initialize graphs
 			_gamePiecesGraph = new LineGraph("Game Pieces", GamePiecesGraphCanvas);
-			_sandCargePlot = new LinePlot(Brushes.Orange, true, GamePiecesGraphCanvas);
+			_sandCargoPlot = new LinePlot(Brushes.Orange, true, GamePiecesGraphCanvas);
 			_sandPanelPlot = new LinePlot(Brushes.Yellow, true, GamePiecesGraphCanvas);
 			_teleCargoPlot = new LinePlot(Brushes.Orange, false, GamePiecesGraphCanvas);
 			_telePanelPlot = new LinePlot(Brushes.Yellow, false, GamePiecesGraphCanvas);
 			_habLevelPlot = new LinePlot(Brushes.Red, false, GamePiecesGraphCanvas);
-			_gamePiecesGraph.LinePlots.Add(_sandCargePlot);
+			_gamePiecesGraph.LinePlots.Add(_sandCargoPlot);
 			_gamePiecesGraph.LinePlots.Add(_sandPanelPlot);
 			_gamePiecesGraph.LinePlots.Add(_teleCargoPlot);
 			_gamePiecesGraph.LinePlots.Add(_telePanelPlot);
@@ -359,7 +359,7 @@ namespace Team20ScoutingClient {
 		}
 
 		private void RefreshTeamTrendsTab() {
-			_sandCargePlot.Query =
+			_sandCargoPlot.Query =
 				"SELECT SandCargoShip + SandCargoRocket1 + SandCargoRocket2 + SandCargoRocket3 " +
 				"FROM RawData " +
 				"WHERE TeamNumber = " + TeamTrendsSelection.SelectedItem.ToString() + " " +
