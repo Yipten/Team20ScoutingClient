@@ -46,11 +46,24 @@ namespace Team20ScoutingClient {
 			//	linePlot.Update();
 			//	Canvas.Children.Add(linePlot.Line);
 			//}
-			foreach (LinePlot linePlot in LinePlots)
+			foreach (LinePlot linePlot in LinePlots) {
 				if (!Canvas.Children.Contains(linePlot.Line))
 					Canvas.Children.Add(linePlot.Line);
-			foreach (LinePlot linePlot in LinePlots)
 				linePlot.Update();
+				linePlot.MaxGraphValue = GetMaxValue();
+			}
+			foreach (LinePlot linePlot in LinePlots)
+				linePlot.Draw();
+		}
+
+		private double GetMaxValue() {
+			if (LinePlots.Count == 0)
+				return 0;
+			double max = 0;
+			foreach (LinePlot linePlot in LinePlots)
+				if (linePlot.MaxPlotValue > max)
+					max = linePlot.MaxPlotValue;
+			return max;
 		}
 
 		private void Canvas_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {       //TODO: keep working on this (for now it is disabled)
